@@ -19,6 +19,7 @@ const LoginForm = ({ onLogin }) => {
         autoClose: 3000,
       });
     };
+    
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,11 +36,8 @@ const LoginForm = ({ onLogin }) => {
       if (data.success) {
         localStorage.setItem("token", data.token);
         onLogin(email, password, data.isAdmin);
-
-        const redirectTo = localStorage.getItem("redirectAfterLogin") || "/dashboard";
-        localStorage.removeItem("redirectAfterLogin");
-        navigate(redirectTo);
-
+        navigate("admin");
+        
         notifySuccess("Logged in successfully");
       } else {
         notifyError("Login failed: " + data.message);

@@ -2,23 +2,29 @@ const db = require("../config/db");
 
 const Complaint = {
   createComplaint: (complaint, callback) => {
-    const { type, rollNumber, description, building, room } = complaint;
+    const {
+      name,
+      email,
+      priority,
+      location,
+      subject,
+      message,
+      attachments,
+    } = complaint;
 
     const sql = `
       INSERT INTO complaints 
-      (type, rollNumber, description, building, room) 
-      VALUES (?, ?, ?, ?, ?)
+      (name, email, priority, location, subject, message, attachments) 
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [type, rollNumber, description, building, room], callback);
+    db.query(sql, [name, email, priority, location, subject, message, attachments], callback);
   },
 
-  // Get all complaints (for admin)
   getAll: (callback) => {
     db.query("SELECT * FROM complaints", callback);
   },
 
-  // Assign personnel to complaint
   assign: (id, personnel, callback) => {
     const sql = `
       UPDATE complaints 
@@ -27,7 +33,6 @@ const Complaint = {
     `;
     db.query(sql, [personnel.assignedName, personnel.assignedContact, id], callback);
   },
-
 };
 
 module.exports = Complaint;

@@ -17,28 +17,28 @@ import Header from "./assets/components/Header";
 import Footer from "./assets/components/Footer";
 import Track from "./assets/components/Track";
 import CategorySelection from "./assets/components/CategorySelection";
-// import TrackPage from "./components/TrackPage"; 
-// import NotFound from "./components/NotFound"; 
+import { useNavigate } from "react-router-dom";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  // const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        console.log("Decoded token:", decoded);
         setIsLoggedIn(true);
         setIsAdmin(decoded.isAdmin === true);
-        console.log("isAdmin", isAdmin);
+        // console.log(isAdmin);
       } catch (err) {
         console.error("Invalid token", err);
         localStorage.removeItem("token");
       }
     }
   }, []);
+
 
   const handleLogin = async (email, password) => {
     try {
@@ -53,8 +53,9 @@ const App = () => {
         localStorage.setItem("token", data.token);
 
         const decoded = jwtDecode(data.token);
-        setIsAdmin(decoded.isAdmin);
         setIsLoggedIn(true);
+        setIsAdmin(decoded.isAdmin);
+
       } else {
         alert("Invalid credentials");
       }
@@ -75,20 +76,24 @@ const App = () => {
     <ToastContainer />
     <Router>
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
-
         <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
-
         <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <Routes>
-            {/* <Route path="/" element={<Navigate to={isLoggedIn ? (isAdmin ? "/admin" : "/dashboard") : "/login"} />} /> */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/login" element={isLoggedIn ? (<Navigate to={isAdmin ? "/admin" : "/dashboard"} />
+            <Route 
+              path="/" 
+              element={<LandingPage />} 
+            />
+
+            <Route 
+              path="/login" 
+              element={isLoggedIn ? (<Navigate to={isAdmin ? "/admin" : "/dashboard"} />
                 ) : (<LoginForm onLogin={handleLogin} />)
               }
             />
 
             <Route 
-              path="/signup" element={ isLoggedIn ? ( <Navigate to={isAdmin ? "/admin" : "/dashboard"} />
+              path="/signup" 
+              element={ isLoggedIn ? ( <Navigate to={isAdmin ? "/admin" : "/dashboard"} />
               ) : ( <SignupForm onSignupSuccess={() => (window.location.href = "/login")} /> )
             }
             />
@@ -110,8 +115,9 @@ const App = () => {
 
             <Route
               path="/admin"
-              element={isLoggedIn && isAdmin ? <AdminDashboard /> : <Navigate to="/" />}
+              element={isLoggedIn  ? <AdminDashboard /> : <Navigate to="/" />}
             />
+
             <Route
               path="/track"
               element={isLoggedIn && !isAdmin ? <Track /> : <Navigate to="/" />}

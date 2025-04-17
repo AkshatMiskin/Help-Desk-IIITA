@@ -8,14 +8,15 @@ const login = async (req, res) => {
   // Check for admin login
   if (email === "admin@iiita.ac.in" && password === "admin") {
     const token = jwt.sign({ name: "Admin", email, isAdmin: true }, SECRET_KEY, { expiresIn: '1h' });
+    return res.json({ success: true, token, isAdmin: true });
   }  
-
+  
   // Check for regular user login
   findUser(email, password, (err, results) => {
     if (err) return res.status(500).json({ success: false, error: err });
 
     if (results.length > 0) {
-      const user = results[0]; // Assuming the first result is the correct user
+      const user = results[0]; 
       const token = jwt.sign({ name: user.name, email: user.email, isAdmin: false }, SECRET_KEY, { expiresIn: '1h' });
       return res.json({ success: true, token });
     } else {

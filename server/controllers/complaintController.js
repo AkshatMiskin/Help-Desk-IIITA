@@ -1,22 +1,30 @@
 const Complaint = require('../models/complaintModel');
 const db = require("../config/db");
 
-
 exports.submitComplaint = (req, res) => {
-  const { type, rollNumber, description, building, room } = req.body;
+  const { name, email, priority, location, subject, message } = req.body;
 
-  if (!type || !rollNumber || !description || !building || !room) {
+  if (!name || !email || !priority || !location  || !subject || !message) {
     return res.status(400).json({
       success: false,
       message: 'Please fill all required fields',
     });
   }
-
-  const complaint = {rollNumber, type, description, building, room };
+  // Extract filenames from uploaded files
+  const attachments = req.files?.map((file) => file.filename).join(",") || "";
+  const complaint = {
+    name,
+    email,
+    priority,
+    location,
+    subject,
+    message,
+    attachments: attachments || null,
+  };
 
   Complaint.createComplaint(complaint, (err, result) => {
     if (err) {
-      console.error(' Error creating complaint:', err);
+      console.error('Error creating complaint:', err);
       return res.status(500).json({
         success: false,
         message: 'Internal server error while submitting complaint',
@@ -33,7 +41,7 @@ exports.submitComplaint = (req, res) => {
 exports.getAllComplaints = (req, res) => {
   Complaint.getAll((err, results) => {
     if (err) {
-      console.error(' Error fetching complaints:', err);
+      console.error('Error fetching complaints:', err);
       return res.status(500).json({
         success: false,
         message: 'Failed to fetch complaints',
@@ -60,7 +68,7 @@ exports.assignPersonnel = (req, res) => {
 
   Complaint.assign(id, { assignedName, assignedContact }, (err, result) => {
     if (err) {
-      console.error(' Error assigning personnel:', err);
+      console.error('Error assigning personnel:', err);
       return res.status(500).json({
         success: false,
         message: 'Failed to assign personnel',
@@ -74,7 +82,6 @@ exports.assignPersonnel = (req, res) => {
   });
 };
 
-// Get complaints for a specific user (by email)
 exports.getComplaintsByUser = (req, res) => {
   const email = req.params.email;
 
@@ -87,7 +94,7 @@ exports.getComplaintsByUser = (req, res) => {
 
   Complaint.getByEmail(email, (err, results) => {
     if (err) {
-      console.error(' Error fetching user complaints:', err);
+      console.error('Error fetching user complaints:', err);
       return res.status(500).json({
         success: false,
         message: 'Failed to fetch user complaints',

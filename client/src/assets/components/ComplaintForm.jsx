@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const TicketForm = () => {
   const [fileName, setFileName] = useState("");
-
+  const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,13 +13,9 @@ const TicketForm = () => {
     subject: "",
     message: "",
   });
-
-  const [files, setFiles] = useState([]);
-
   const notifyError = (message) => {
     toast.error(message, { position: "top-right", autoClose: 3000 });
   };
-
   const notifySuccess = (message) => {
     toast.success(message, { position: "top-right", autoClose: 3000 });
   };
@@ -28,49 +24,53 @@ const TicketForm = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData((prevData) => ({ ...prevData, attachment: file }));
+      setFiles([file]);  // update the files state
       setFileName(file.name);
     }
   };
+  
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, priority, location, subject, message } = formData;
-
-    if (!name || !email || !priority || !location  || !subject || !message) {
+  
+    if (!name || !email || !priority || !location || !subject || !message) {
       notifyError("Please fill all required fields");
       return;
     }
-
+  
     const token = localStorage.getItem("token");
-
+  
     const form = new FormData();
     Object.entries(formData).forEach(([key, val]) => form.append(key, val));
-    files.forEach(file => form.append("attachments", file));
-
+    
+    // Ensure that the file is correctly appended
+    if (files.length > 0) {
+      files.forEach(file => form.append("attachments", file));
+    }
+  
     try {
-      const res = await fetch("http://localhost:5000/api/tickets", {
+      const res = await fetch("http://localhost:5000/api/complaints", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: form,
       });
-
+  
       const data = await res.json();
       if (data.success) {
         notifySuccess("Ticket submitted successfully");
         setFormData({
           name: "",
           email: "",
+          subject: "",
           priority: "Low",
           location: "",
-          subject: "",
           message: "",
         });
         setFiles([]);
@@ -211,6 +211,7 @@ const TicketForm = () => {
               type="file"
               onChange={handleFileChange}
               className="hidden"
+              multiple
             />
             <span className="text-white">{fileName || "No file chosen"}</span>
           </div>

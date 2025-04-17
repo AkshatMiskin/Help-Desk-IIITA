@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Building2 } from "lucide-react";
-import { Link, useLocation  } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; // Make sure you use named import
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Header = ({ isLoggedIn, onLogout }) => {
   const [userName, setUserName] = useState("");
-  const location = useLocation(); 
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (isLoggedIn) {
       const token = localStorage.getItem("token");
@@ -24,6 +24,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
   const handleLogoutClick = () => {
     localStorage.removeItem("token");
     onLogout(); // Notify App.jsx to update isLoggedIn state
+    navigate("/login");
   };
 
   return (
