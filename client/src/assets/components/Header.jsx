@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Building2 } from "lucide-react";
-import { jwtDecode } from "jwt-decode"; // Make sure you use named import
+import { Building2, ArrowLeft } from "lucide-react";
+import { jwtDecode } from "jwt-decode";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Header = ({ isLoggedIn, onLogout }) => {
   const [userName, setUserName] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -13,7 +14,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
       if (token) {
         try {
           const decoded = jwtDecode(token);
-          setUserName(decoded.name  || "User");
+          setUserName(decoded.name || "User");
         } catch (err) {
           console.error("Invalid token", err);
         }
@@ -23,8 +24,12 @@ const Header = ({ isLoggedIn, onLogout }) => {
 
   const handleLogoutClick = () => {
     localStorage.removeItem("token");
-    onLogout(); // Notify App.jsx to update isLoggedIn state
+    onLogout();
     navigate("/login");
+  };
+
+  const handleBackClick = () => {
+    navigate("/");
   };
 
   return (
@@ -32,6 +37,15 @@ const Header = ({ isLoggedIn, onLogout }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
+            {location.pathname !== "/" && (
+              <button
+                onClick={handleBackClick}
+                className="text-white hover:text-indigo-200 transition duration-200"
+                aria-label="Back to Home"
+              >
+                <ArrowLeft className="h-6 w-6 cursor-pointer" />
+              </button>
+            )}
             <Building2 className="h-8 w-8 text-white" />
             <h1 className="text-xl font-bold text-white tracking-tight">
               IIITA Help Desk
@@ -58,7 +72,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
               <span className="text-white font-medium">{userName}</span>
               <button
                 onClick={handleLogoutClick}
-                className="px-4 py-1.5 text-sm cursor-pointer font-medium text-white bg-red-500 hover:bg-red-600 rounded-full transition duration-200"
+                className="px-4 py-1.5 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-full transition duration-200"
               >
                 Logout
               </button>
@@ -71,4 +85,3 @@ const Header = ({ isLoggedIn, onLogout }) => {
 };
 
 export default Header;
-

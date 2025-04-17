@@ -7,18 +7,18 @@ const Complaint = {
       email,
       priority,
       location,
-      subject,
+      type,
       message,
       attachments,
     } = complaint;
 
     const sql = `
       INSERT INTO complaints 
-      (name, email, priority, location, subject, message, attachments) 
+      (name, email, priority, location, type, message, attachments) 
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [name, email, priority, location, subject, message, attachments], callback);
+    db.query(sql, [name, email, priority, location, type, message, attachments], callback);
   },
 
   getAll: (callback) => {

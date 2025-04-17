@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
 
 const TicketForm = () => {
   const [fileName, setFileName] = useState("");
@@ -10,9 +11,13 @@ const TicketForm = () => {
     email: "",
     priority: "Low",
     location: "",
-    subject: "",
+    type: "",
     message: "",
   });
+  const location = useLocation();
+  const categoryFromState = location.state?.category || "";
+
+
   const notifyError = (message) => {
     toast.error(message, { position: "top-right", autoClose: 3000 });
   };
@@ -31,14 +36,18 @@ const TicketForm = () => {
       setFileName(file.name);
     }
   };
-  
+  useEffect(() => {
+    if (categoryFromState) {
+      setFormData(prev => ({ ...prev, type: categoryFromState }));
+    }
+  }, [categoryFromState]);
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, priority, location, subject, message } = formData;
-  
-    if (!name || !email || !priority || !location || !subject || !message) {
+    const { name, email, priority, location, type, message } = formData;
+  // console.log(type);
+    if (!name || !email || !priority || !location || !type || !message) {
       notifyError("Please fill all required fields");
       return;
     }
@@ -68,7 +77,7 @@ const TicketForm = () => {
         setFormData({
           name: "",
           email: "",
-          subject: "",
+          type: "",
           priority: "Low",
           location: "",
           message: "",
@@ -84,30 +93,31 @@ const TicketForm = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl bg-gray-800 p-12 rounded-3xl shadow-2xl border border-gray-700">
+    <div className="w-full max-w-7xl bg-gray-800 p-12 rounded-3xl shadow-2xl border border-gray-700">
       <div className="text-center mb-10">
         <h1 className="text-5xl font-extrabold text-indigo-400">IIITA Help Desk</h1>
         <h2 className="text-2xl font-medium text-gray-300 mt-4">Submit a Ticket</h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {[
-          ["Name", "name", "text"],
-          ["Email", "email", "email"],
-          ["Subject", "subject", "text"],
-        ].map(([label, name, type]) => (
-          <div key={name}>
-            <label className="block text-base font-medium text-gray-300 mb-1">{label}</label>
-            <input
-              type={type}
-              name={name}
-              value={formData[name]}
-              onChange={handleChange}
-              required
-              className="w-full px-5 py-3 bg-gray-900 text-white border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg"
-            />
-          </div>
-        ))}
+          {[
+            ["Name", "name", "text"],
+            ["Email", "email", "email"],
+            ["Type", "type", "text"],
+          ].map(([label, name, type]) => (
+            <div key={name}>
+              <label className="block text-base font-medium text-gray-300 mb-1">{label}</label>
+              <input
+                type={type}
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                required
+                readOnly={name === "type"} // Make type read-only
+                className="w-full px-5 py-3 bg-gray-900 text-white border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg"
+              />
+            </div>
+          ))}
 
         <div>
           <label className="block text-base font-medium text-gray-300 mb-1">Priority</label>

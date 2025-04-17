@@ -3,18 +3,17 @@ import { useNavigate } from "react-router-dom";
 
 const categories = [
   "Network",
-  "Telephone",
-  "Cable TV",
-  "Audio/Video",
+  "Cleaning",
+  "Carpentry",
   "PC Maintenance",
-  "E-Mail",
-  "Projectors",
+  "Plumbing",
+  "Electricity",
 ];
 
 const CategorySelection = () => {
   const navigate = useNavigate();
-
   const handleSelect = (category) => {
+    console.log(category);
     navigate("/complaint", { state: { category } });
   };
 

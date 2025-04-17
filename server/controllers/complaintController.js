@@ -1,10 +1,13 @@
 const Complaint = require('../models/complaintModel');
 const db = require("../config/db");
+const getComplaintTypeId = `
+  SELECT id FROM complaint_types WHERE type_name = ?
+`;
 
 exports.submitComplaint = (req, res) => {
-  const { name, email, priority, location, subject, message } = req.body;
+  const { name, email, priority, location, type, message } = req.body;
 
-  if (!name || !email || !priority || !location  || !subject || !message) {
+  if (!name || !email || !priority || !location  || !type || !message) {
     return res.status(400).json({
       success: false,
       message: 'Please fill all required fields',
@@ -17,7 +20,7 @@ exports.submitComplaint = (req, res) => {
     email,
     priority,
     location,
-    subject,
+    type,
     message,
     attachments: attachments || null,
   };

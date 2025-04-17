@@ -101,7 +101,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 p-8">
+    <div className="min-h-screen w-full overflow-x-hidden bg-gray-900 p-8">
       <h2 className="text-4xl font-extrabold text-center text-indigo-400 mb-10">
         Admin Dashboard
       </h2>
@@ -109,11 +109,12 @@ const AdminDashboard = () => {
       {complaints.length === 0 ? (
         <p className="text-center text-gray-300">No complaints found.</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
           {complaints.map((complaint) => (
             <div
               key={complaint.id}
-              className="relative bg-gray-800 shadow-md rounded-2xl p-6 border border-gray-700 hover:shadow-lg transition"
+              className="relative min-h-[300px] bg-gray-800 shadow-md rounded-2xl p-6 border border-gray-700 hover:shadow-lg transition"
             >
               {/* Cross button */}
               <button
@@ -130,13 +131,19 @@ const AdminDashboard = () => {
 
               <div className="text-sm text-gray-300 space-y-1 mb-4">
                 <p>
-                  <span className="font-medium">Roll No:</span> {complaint.rollNumber}
+                  <span className="font-medium">Name:</span> {complaint.name}
                 </p>
                 <p>
                   <span className="font-medium">Email:</span> {complaint.email}
                 </p>
                 <p>
-                  <span className="font-medium">Location:</span> {complaint.building} - {complaint.room}
+                  <span className="font-medium">Location:</span> {complaint.location}
+                </p>
+                <p>
+                  <span className="font-medium">Priority:</span> {complaint.priority}
+                </p>
+                <p>
+                  <span className="font-medium">Subject:</span> {complaint.subject}
                 </p>
                 <p>
                   <span className="font-medium">Status:</span>{" "}
@@ -151,7 +158,7 @@ const AdminDashboard = () => {
                   </span>
                 </p>
                 <p>
-                  <span className="font-medium">Description:</span> {complaint.description}
+                  <span className="font-medium">Description:</span> {complaint.message}
                 </p>
               </div>
 

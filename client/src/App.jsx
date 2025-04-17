@@ -12,7 +12,7 @@ import LoginForm from "./assets/components/LoginForm";
 import SignupForm from "./assets/components/SignupForm";
 import ComplaintForm from "./assets/components/ComplaintForm";
 import AdminDashboard from "./assets/components/AdminDashboard";
-import UserDashboard from "./assets/components/UserDashboard";
+// import UserDashboard from "./assets/components/UserDashboard";
 import Header from "./assets/components/Header";
 import Footer from "./assets/components/Footer";
 import Track from "./assets/components/Track";
@@ -31,7 +31,6 @@ const App = () => {
         const decoded = jwtDecode(token);
         setIsLoggedIn(true);
         setIsAdmin(decoded.isAdmin === true);
-        // console.log(isAdmin);
       } catch (err) {
         console.error("Invalid token", err);
         localStorage.removeItem("token");
@@ -98,14 +97,14 @@ const App = () => {
             }
             />
 
-            <Route
+            {/* <Route
               path="/dashboard"
               element={isLoggedIn && !isAdmin ? <UserDashboard /> : <Navigate to="/" />}
-            />
+            /> */}
 
             <Route 
               path="/select-category" 
-              element={isLoggedIn && !isAdmin && <CategorySelection />} 
+              element={isLoggedIn && !isAdmin ?<CategorySelection /> : <Navigate to="/" />} 
             />
 
             <Route
@@ -115,7 +114,7 @@ const App = () => {
 
             <Route
               path="/admin"
-              element={isLoggedIn  ? <AdminDashboard /> : <Navigate to="/" />}
+              element={<AdminDashboard />}
             />
 
             <Route
