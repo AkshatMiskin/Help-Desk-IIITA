@@ -24,30 +24,32 @@ const AdminDashboard = () => {
     });
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this complaint?")) return;
-
+  const resolve = async (id) => {
     try {
       const res = await fetch(`http://localhost:5000/api/complaints/${id}`, {
-        method: "DELETE",
+        method: "PATCH", // changed from DELETE
       });
+  
       const data = await res.json();
-      if (data.success) {
-        notifySuccess("Complaint deleted!");
-        fetchComplaints();
+  
+      if (res.ok && data.success) {
+        notifySuccess(data.message || "Complaint marked as resolved");
+  
+        // Remove the resolved complaint from UI without re-fetch
+        setComplaints(prev => prev.filter(c => c.id !== id));
       } else {
-        notifyError("Failed to delete complaint");
+        notifyError(data.message || "Failed to mark as resolved");
       }
     } catch (error) {
-      console.error("Error deleting complaint", error);
-      notifyError("Error deleting complaint");
+      console.error("Error resolving complaint:", error);
+      notifyError("An error occurred while resolving the complaint.");
     }
   };
-
+  
   useEffect(() => {
     fetchComplaints();
   }, []);
-
+  
   const fetchComplaints = async () => {
     try {
       const res = await fetch("http://localhost:5000/api/complaints");
@@ -130,13 +132,6 @@ const AdminDashboard = () => {
               key={complaint.id}
               className="relative min-h-[320px] bg-gray-800 shadow-md rounded-2xl p-6 border border-gray-700 hover:shadow-lg transition"
             >
-              <button
-                onClick={() => handleDelete(complaint.id)}
-                className="absolute top-2 right-2 text-gray-400 hover:text-red-500 text-xl font-bold"
-                title="Delete Complaint"
-              >
-                ×
-              </button>
 
               <h3 className="text-xl font-semibold text-indigo-400 mb-2">
                 {complaint.type}
@@ -173,9 +168,12 @@ const AdminDashboard = () => {
               </div>
 
               {complaint.assigned_personnel_id ? (
-                <div className="text-sm text-green-400 font-medium bg-green-900 p-2 rounded-lg">
-                  Assigned 
-                </div>
+                <button
+                  onClick={() => resolve(complaint.id)}
+                  className="cursor-pointer text-green-400 w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-xl transition"
+                >
+                  Resolve
+                </button>
               ) : (
                 <button
                   onClick={() => openAssignModal(complaint.id, complaint.type)}

@@ -5,6 +5,7 @@ function Track() {
   const [code, setCode] = useState("");
   const [status, setStatus] = useState(null);
   const [error, setError] = useState("");
+  const [personnel, setPersonnel] = useState(null);
 
   const handleTrack = async () => {
     setError("");
@@ -27,9 +28,13 @@ function Track() {
       const data = await res.json();
       if (data.success) {
         setStatus(data.status);
-      } else {
-        setError(data.message || "Ticket not found.");
+        if (data.personnel) {
+          setPersonnel(data.personnel);
+        } else {
+          setPersonnel(null);
+        }
       }
+      
     } catch (err) {
       console.error(err);
       setError("An error occurred while fetching status.");
@@ -64,6 +69,12 @@ function Track() {
         {status && (
           <div className="mt-4 text-lg text-white text-center">
             <strong>Status:</strong> <span className="text-indigo-400">{status}</span>
+          </div>
+        )}
+        {personnel && (
+          <div className="mt-2 text-white text-center">
+            <p><strong>Assigned To:</strong> {personnel.name}</p>
+            <p><strong>Contact:</strong> {personnel.contact}</p>
           </div>
         )}
 

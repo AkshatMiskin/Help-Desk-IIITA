@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; // Add at top if not already
 
 const TicketForm = () => {
   const [fileName, setFileName] = useState("");
@@ -32,32 +33,51 @@ const TicketForm = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFiles([file]);  // update the files state
+      setFiles([file]);
       setFileName(file.name);
     }
   };
+
   useEffect(() => {
-    if (categoryFromState) {
-      setFormData(prev => ({ ...prev, type: categoryFromState }));
-    }
+    const fetchUserDetails = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const decoded = jwtDecode(token);
+        const email = decoded.email;
+
+        const res = await fetch(`http://localhost:5000/api/users/${email}`);
+        const data = await res.json();
+
+        if (data.success && data.user) {
+          setFormData(prev => ({
+            ...prev,
+            name: data.user.name,
+            email: data.user.email,
+            type: categoryFromState || "",
+          }));
+        }
+      } catch (err) {
+        console.error("Error fetching user info", err);
+      }
+    };
+
+    fetchUserDetails();
   }, [categoryFromState]);
+
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, priority, location, type, message } = formData;
-  // console.log(type);
     if (!name || !email || !priority || !location || !type || !message) {
       notifyError("Please fill all required fields");
       return;
     }
-  
     const token = localStorage.getItem("token");
-  
     const form = new FormData();
     Object.entries(formData).forEach(([key, val]) => form.append(key, val));
-    
-    // Ensure that the file is correctly appended
     if (files.length > 0) {
       files.forEach(file => form.append("attachments", file));
     }
@@ -107,15 +127,15 @@ const TicketForm = () => {
           ].map(([label, name, type]) => (
             <div key={name}>
               <label className="block text-base font-medium text-gray-300 mb-1">{label}</label>
-              <input
-                type={type}
-                name={name}
-                value={formData[name]}
-                onChange={handleChange}
-                required
-                readOnly={name === "type"} // Make type read-only
-                className="w-full px-5 py-3 bg-gray-900 text-white border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg"
-              />
+                <input
+                  type={type}
+                  name={name}
+                  value={formData[name]}
+                  onChange={handleChange}
+                  required
+                  readOnly={["name", "email", "type"].includes(name)} 
+                  className="w-full px-5 py-3 bg-gray-900 text-white border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg"
+                />
             </div>
           ))}
 

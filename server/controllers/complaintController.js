@@ -134,66 +134,87 @@ exports.assignPersonnel = (req, res) => {
   });
 };
 
-exports.getComplaintsByUser = (req, res) => {
-  const email = req.params.email;
-
-  if (!email) {
-    return res.status(400).json({
-      success: false,
-      message: 'Email is required',
-    });
-  }
-
-  Complaint.getByEmail(email, (err, results) => {
-    if (err) {
-      console.error('Error fetching user complaints:', err);
-      return res.status(500).json({
-        success: false,
-        message: 'Failed to fetch user complaints',
-      });
-    }
-
-    res.json({
-      success: true,
-      data: results,
-    });
+exports.getUserComplaints = (req, res) => {
+  const { email } = req.params;
+  const sql = "SELECT * FROM complaints WHERE email = ?";
+  db.query(sql, [email], (err, results) => {
+    if (err) return res.status(500).json({ success: false, error: err });
+    return res.json({ success: true, complaints: results });
   });
 };
 
-exports.deleteComplaint = (req, res) => {
+
+exports.resolvedComplaint = (req, res) => {
   const { id } = req.params;
 
-  const query = "DELETE FROM complaints WHERE id = ?";
-  db.query(query, [id], (err, result) => {
-    if (err) {
-      console.error("Error deleting complaint:", err);
-      return res.status(500).json({ success: false, message: "Server error" });
+  // First, get the assigned personnel id
+  const getPersonnelQuery = "SELECT assigned_personnel_id FROM complaints WHERE id = ?";
+  db.query(getPersonnelQuery, [id], (err, results) => {
+    if (err || results.length === 0) {
+      return res.status(500).json({ success: false, message: "Error finding complaint" });
     }
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ success: false, message: "Complaint not found" });
-    }
+    const personnelId = results[0].assigned_personnel_id;
 
-    return res.json({ success: true, message: "Complaint deleted successfully" });
+    // Update the complaint status to "Resolved"
+    const updateComplaintQuery = "UPDATE complaints SET status = 'Resolved' WHERE id = ?";
+    db.query(updateComplaintQuery, [id], (err) => {
+      if (err) {
+        return res.status(500).json({ success: false, message: "Error updating complaint" });
+      }
+
+      // Set personnel availability if assigned
+      if (personnelId) {
+        const updatePersonnelQuery = "UPDATE personnel SET available = 1 WHERE id = ?";
+        db.query(updatePersonnelQuery, [personnelId], (err) => {
+          if (err) {
+            console.error("Failed to update personnel availability", err);
+            return res.status(500).json({ success: false, message: "Error updating personnel availability" });
+          }
+
+          return res.json({ success: true, message: "Complaint marked as resolved and personnel available" });
+        });
+      } else {
+        return res.json({ success: true, message: "Complaint marked as resolved" });
+      }
+    });
   });
 };
 
-exports.trackTicket = (req, res) => {
-  console.log("Received trackTicket request"); // Debug log
 
+
+exports.trackTicket = (req, res) => {
   const { email, code } = req.body;
-  console.log(email, code);
+
   if (!email || !code) {
     return res.status(400).json({ success: false, message: "Email and ticket code are required" });
   }
 
-  const sql = "SELECT status FROM complaints WHERE email = ? AND code = ?";
+  const sql = `
+    SELECT c.status, 
+           p.name AS personnel_name, 
+           p.contact AS personnel_contact 
+    FROM complaints c 
+    LEFT JOIN personnel p ON c.assigned_personnel_id = p.id 
+    WHERE c.email = ? AND c.code = ?
+  `;
+
   db.query(sql, [email, code], (err, results) => {
     if (err) return res.status(500).json({ success: false, error: err });
     if (results.length === 0) {
       return res.status(404).json({ success: false, message: "Ticket not found" });
     }
 
-    return res.json({ success: true, status: results[0].status });
+    const { status, personnel_name, personnel_contact } = results[0];
+    const response = { success: true, status };
+
+    if (status === 'Assigned') {
+      response.personnel = {
+        name: personnel_name,
+        contact: personnel_contact,
+      };
+    }
+
+    return res.json(response);
   });
-}
+};

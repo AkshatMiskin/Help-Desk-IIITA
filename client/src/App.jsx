@@ -18,6 +18,7 @@ import Footer from "./assets/components/Footer";
 import Track from "./assets/components/Track";
 import CategorySelection from "./assets/components/CategorySelection";
 import { useNavigate } from "react-router-dom";
+import UserDashboard from "./assets/components/UserDashboard";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -114,7 +115,11 @@ const App = () => {
 
             <Route
               path="/admin"
-              element={<AdminDashboard />}
+              element={isAdmin && <AdminDashboard />}
+            />
+            <Route
+              path="/profile"
+              element={isLoggedIn && !isAdmin && <UserDashboard />}
             />
 
             <Route

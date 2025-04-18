@@ -70,10 +70,16 @@ const Header = ({ isLoggedIn, onLogout }) => {
           ) : (
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 px-3 py-1 bg-white text-indigo-700 rounded-full font-medium text-sm shadow-sm">
-                <span className="bg-indigo-200 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
-                  {userName.charAt(0).toUpperCase()}
-                </span>
-                <span>{userName}</span>
+                <Link
+                  to="/profile"
+                  className="flex items-center gap-2 px-3 py-1 text-indigo-700 rounded-full font-medium text-sm hover:bg-gray-100"
+                >
+                  <span className="bg-indigo-200 text-indigo-800 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">
+                    {userName.charAt(0).toUpperCase()}
+                  </span>
+                  <span>{userName}</span>
+                </Link>
+
               </div>
               <button
                 onClick={handleLogoutClick}
