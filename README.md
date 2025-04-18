@@ -68,28 +68,28 @@ CREATE TABLE personnel (
 
 ## TABLE 4: COMPLAINTS
 ```sql
-CREATE TABLE `complaints` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `status` enum('Pending','Assigned','Resolved') DEFAULT 'Pending',
-  `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `name` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `priority` enum('Low','Medium','High') DEFAULT 'Low',
-  `location` varchar(100) DEFAULT NULL,
-  `message` text,
-  `attachments` text,
-  `complaint_type_id` int DEFAULT NULL,
-  `assigned_personnel_id` int DEFAULT NULL,
-  `user_id` int DEFAULT NULL,
-  `type` text,
-  `code` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_complaint_type` (`complaint_type_id`),
-  KEY `fk_personnel` (`assigned_personnel_id`),
-  KEY `fk_user` (`user_id`),
-  CONSTRAINT `fk_complaint_type` FOREIGN KEY (`complaint_type_id`) REFERENCES `complaint_types` (`id`),
-  CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-  CONSTRAINT `fk_assigned_personnel` FOREIGN KEY (`assigned_personnel_id`) REFERENCES `personnel` (`id`)
+CREATE TABLE complaints (
+  id int NOT NULL AUTO_INCREMENT,
+  status enum('Pending','Assigned','Resolved') DEFAULT 'Pending',
+  createdAt timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  name varchar(100) DEFAULT NULL,
+  email varchar(100) DEFAULT NULL,
+  priority enum('Low','Medium','High') DEFAULT 'Low',
+  location varchar(100) DEFAULT NULL,
+  message text,
+  attachments text,
+  complaint_type_id` int DEFAULT NULL,
+  assigned_personnel_id int DEFAULT NULL,
+  user_id int DEFAULT NULL,
+  type text,
+  code varchar(10) DEFAULT NULL,
+  PRIMARY KEY (id`),
+  KEY fk_complaint_type (complaint_type_id),
+  KEY fk_personnel (assigned_personnel_id),
+  KEY fk_user (user_id),
+  CONSTRAINT fk_complaint_type FOREIGN KEY (complaint_type_id) REFERENCES complaint_types (id),
+  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id)
+  CONSTRAINT fk_assigned_personnel FOREIGN KEY (assigned_personnel_id) REFERENCES personnel (id)
 );
 
 ```
