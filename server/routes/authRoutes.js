@@ -7,7 +7,7 @@ const verifyToken = require('../middleware/auth');
 //   res.json({ success: true, message: "You are authorized", user: req.user });
 // });
 
-router.post('/login', login);
+router.post('/login', verifyToken, login);
 router.post('/signup', signup);
 
 module.exports = router;

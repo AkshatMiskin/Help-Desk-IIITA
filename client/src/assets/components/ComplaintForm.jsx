@@ -73,7 +73,7 @@ const TicketForm = () => {
   
       const data = await res.json();
       if (data.success) {
-        notifySuccess("Ticket submitted successfully");
+        notifySuccess("Ticket submitted! Check your email for your 4-digit code.");
         setFormData({
           name: "",
           email: "",
@@ -85,7 +85,7 @@ const TicketForm = () => {
         setFiles([]);
       } else {
         notifyError("Failed to submit ticket");
-      }
+      }      
     } catch (err) {
       console.error(err);
       notifyError("Error submitting ticket");

@@ -15,6 +15,7 @@ exports.submitComplaint = (req, res) => {
   }
   // Extract filenames from uploaded files
   const attachments = req.files?.map((file) => file.filename).join(",") || "";
+  
   const complaint = {
     name,
     email,
@@ -36,7 +37,7 @@ exports.submitComplaint = (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: 'Complaint submitted successfully',
+      message: "Ticket submitted and email sent.",
     });
   });
 };

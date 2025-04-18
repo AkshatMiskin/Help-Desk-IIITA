@@ -81,7 +81,7 @@ const LoginForm = ({ onLogin }) => {
 
         <button
           type="submit"
-          className="w-full bg-indigo-600 curser-pointer text-white font-semibold py-3 text-lg rounded-xl hover:bg-indigo-700 transition duration-200"
+          className="w-full bg-indigo-600 cursor-pointer text-white font-semibold py-3 text-lg rounded-xl hover:bg-indigo-700 transition duration-200"
         >
           Login
         </button>

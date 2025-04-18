@@ -1,7 +1,16 @@
 const db = require("../config/db");
-
+require("dotenv").config();
+const nodemailer = require("nodemailer");
+const generateCode = () => Math.floor(1000 + Math.random() * 9000);
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,         // Replace with your email
+    pass: process.env.PASSWORD,      // Use App Password if using Gmail
+  },
+});
 const Complaint = {
-  createComplaint: (complaint, callback) => {
+  createComplaint: async (complaint, callback) => {
     const {
       name,
       email,
@@ -19,6 +28,22 @@ const Complaint = {
     `;
 
     db.query(sql, [name, email, priority, location, type, message, attachments], callback);
+
+    const code = generateCode();
+    await transporter.sendMail({
+      from: "iit2023219@iiita.ac.in",
+      to: email,
+      subject: "IIITA Help Desk - Ticket Submitted",
+      html: `
+        <h2>Your Ticket Has Been Submitted</h2>
+        <p>Hi ${name},</p>
+        <p>Thank you for submitting your issue to the IIITA Help Desk.</p>
+        <p><strong>Your Ticket Code:</strong> <span style="font-size: 1.2rem; color: #4f46e5">${code}</span></p>
+        <p>Use this code for future reference.</p>
+        <br />
+        <p>Regards,<br />IIITA Help Desk Team</p>
+      `,
+    });
   },
 
   // const result = await ;
