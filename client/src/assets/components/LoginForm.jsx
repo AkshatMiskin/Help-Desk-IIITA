@@ -13,12 +13,12 @@ const LoginForm = ({ onLogin }) => {
       });
     };
   
-    const notifySuccess = (message) => {
-      toast.success(message, {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    };
+  const notifySuccess = (message) => {
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
     
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +36,6 @@ const LoginForm = ({ onLogin }) => {
       if (data.success) {
         localStorage.setItem("token", data.token);
         onLogin(email, password, data.isAdmin);
-        navigate("admin");
         
         notifySuccess("Logged in successfully");
       } else {
