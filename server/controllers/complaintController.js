@@ -59,8 +59,6 @@ exports.getAllComplaints = (req, res) => {
   });
 };
 
-
-
 exports.assignPersonnel = (req, res) => {
   const id = req.params.id;
   const { assignedName, assignedContact } = req.body;
@@ -136,8 +134,6 @@ exports.assignPersonnel = (req, res) => {
   });
 };
 
-
-
 exports.getComplaintsByUser = (req, res) => {
   const email = req.params.email;
 
@@ -181,3 +177,23 @@ exports.deleteComplaint = (req, res) => {
     return res.json({ success: true, message: "Complaint deleted successfully" });
   });
 };
+
+exports.trackTicket = (req, res) => {
+  console.log("Received trackTicket request"); // Debug log
+
+  const { email, code } = req.body;
+  console.log(email, code);
+  if (!email || !code) {
+    return res.status(400).json({ success: false, message: "Email and ticket code are required" });
+  }
+
+  const sql = "SELECT status FROM complaints WHERE email = ? AND code = ?";
+  db.query(sql, [email, code], (err, results) => {
+    if (err) return res.status(500).json({ success: false, error: err });
+    if (results.length === 0) {
+      return res.status(404).json({ success: false, message: "Ticket not found" });
+    }
+
+    return res.json({ success: true, status: results[0].status });
+  });
+}

@@ -6,6 +6,7 @@ const upload = require("../middleware/upload");
 
 router.post("/complaints",  upload.array("attachments"), complaintController.submitComplaint);
 router.get("/complaints",  complaintController.getAllComplaints);
+router.post("/complaints/track", complaintController.trackTicket);
 router.delete("/complaints/:id",  complaintController.deleteComplaint);
 router.put("/complaints/:id/assign",  complaintController.assignPersonnel);
 router.get("/complaints/user/:email",  complaintController.getComplaintsByUser);

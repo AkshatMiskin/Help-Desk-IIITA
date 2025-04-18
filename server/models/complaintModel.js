@@ -20,24 +20,25 @@ const Complaint = {
       message,
       attachments,
     } = complaint;
-
+    const code = generateCode();
     const sql = `
       INSERT INTO complaints 
-      (name, email, priority, location, type, message, attachments) 
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+      (name, email, priority, location, type, message, attachments, code) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [name, email, priority, location, type, message, attachments], callback);
+    db.query(sql, [name, email, priority, location, type, message, attachments, code], callback);
 
-    const code = generateCode();
+    
     await transporter.sendMail({
       from: "iit2023219@iiita.ac.in",
       to: email,
       subject: "IIITA Help Desk - Ticket Submitted",
       html: `
         <h2>Your Ticket Has Been Submitted</h2>
-        <p>Hi ${name},</p>
+        <p>Hi <span style="font-size: 1.1rem; color:rgb(85, 235, 15)">${name}</span>,</p>
         <p>Thank you for submitting your issue to the IIITA Help Desk.</p>
+        <p>Your complaint for <span style="font-size: 1.2rem; color:rgb(239, 51, 67)">${type}</span> is noted.</p>
         <p><strong>Your Ticket Code:</strong> <span style="font-size: 1.2rem; color: #4f46e5">${code}</span></p>
         <p>Use this code for future reference.</p>
         <br />

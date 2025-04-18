@@ -10,7 +10,7 @@ const findUser = (email, password, callback) => {
   db.query(query, [email, password], callback);
 };
 const findAdmin = (email, password, callback) => {
-  const query = "SELCET * FROM admin WHERE email = ? AND password = ?"
+  const query = "SELECT * FROM admin WHERE email = ? AND password = ?"
   db.query(query, [email, password], callback);
 }
 const createUser = (name, email, password, callback) => {
