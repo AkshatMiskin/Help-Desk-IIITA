@@ -13,7 +13,7 @@ const Footer = () => {
             <p className="text-sm mt-2">
               Check out the{" "}
               <a
-                href="https://github.com/your-repo-url"
+                href="https://github.com/kalim-Asim/Help-Desk-IIITA"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-indigo-400 hover:underline"
@@ -26,7 +26,7 @@ const Footer = () => {
 
           <div className="flex space-x-6">
             <a
-              href="https://github.com/your-profile"
+              href="https://github.com/kalim-Asim"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-indigo-400 transition duration-300 text-xl"
@@ -35,7 +35,7 @@ const Footer = () => {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/your-profile"
+              href="https://linkedin.com/in/name"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-indigo-400 transition duration-300 text-xl"
@@ -44,7 +44,7 @@ const Footer = () => {
               <FaLinkedin />
             </a>
             <a
-              href="https://instagram.com/your-profile"
+              href="https://instagram.com/name"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-indigo-400 transition duration-300 text-xl"

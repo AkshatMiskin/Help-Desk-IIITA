@@ -58,6 +58,8 @@ exports.getAllComplaints = (req, res) => {
   });
 };
 
+
+
 exports.assignPersonnel = (req, res) => {
   const id = req.params.id;
   const { assignedName, assignedContact } = req.body;
@@ -69,21 +71,71 @@ exports.assignPersonnel = (req, res) => {
     });
   }
 
-  Complaint.assign(id, { assignedName, assignedContact }, (err, result) => {
+  // First, fetch the personnel ID based on name and contact
+  const fetchPersonnelQuery = `
+    SELECT id FROM personnel WHERE name = ? AND contact = ?
+  `;
+
+  db.query(fetchPersonnelQuery, [assignedName, assignedContact], (err, personnelResult) => {
     if (err) {
-      console.error('Error assigning personnel:', err);
+      console.error('Error fetching personnel:', err);
       return res.status(500).json({
         success: false,
-        message: 'Failed to assign personnel',
+        message: 'Failed to fetch personnel',
       });
     }
 
-    res.json({
-      success: true,
-      message: 'Personnel assigned successfully',
+    if (personnelResult.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Personnel not found with the given name and contact',
+      });
+    }
+
+    const personnelId = personnelResult[0].id;
+
+    // Second, update the complaint with the assigned personnel ID
+    const updateComplaintQuery = `
+      UPDATE complaints
+      SET assigned_personnel_id = ?, status = 'Assigned'
+      WHERE id = ?
+    `;
+
+    db.query(updateComplaintQuery, [personnelId, id], (err2, result2) => {
+      if (err2) {
+        console.error('Error updating complaint:', err2);
+        return res.status(500).json({
+          success: false,
+          message: 'Failed to assign personnel to complaint',
+        });
+      }
+
+      // Third, mark the personnel as unavailable
+      const updatePersonnelQuery = `
+        UPDATE personnel
+        SET available = 0
+        WHERE id = ?
+      `;
+
+      db.query(updatePersonnelQuery, [personnelId], (err3, result3) => {
+        if (err3) {
+          console.error('Error updating personnel availability:', err3);
+          return res.status(500).json({
+            success: false,
+            message: 'Complaint updated, but failed to update personnel availability',
+          });
+        }
+
+        res.json({
+          success: true,
+          message: 'Personnel assigned successfully',
+        });
+      });
     });
   });
 };
+
+
 
 exports.getComplaintsByUser = (req, res) => {
   const email = req.params.email;
