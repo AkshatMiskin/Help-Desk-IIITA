@@ -5,8 +5,8 @@ const generateCode = () => Math.floor(1000 + Math.random() * 9000);
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL,         // Replace with your email
-    pass: process.env.PASSWORD,      // Use App Password if using Gmail
+    user: process.env.EMAIL,        
+    pass: process.env.PASSWORD,      
   },
 });
 const Complaint = {
@@ -40,8 +40,6 @@ const Complaint = {
       db.query(insertSql, [name, email, priority, location, complaint_type_id, message, attachments, code], callback);
     });
 
-
-    
     await transporter.sendMail({
       from: "iit2023219@iiita.ac.in",
       to: email,
@@ -58,16 +56,13 @@ const Complaint = {
       `,
     });
   },
-
-  // const result = await ;
-
+  
   getAll: (callback) => {
     db.query(`
       SELECT c.*, p.name AS assigned_name, p.contact AS assigned_contact
       FROM complaints c
       LEFT JOIN personnel p ON c.assigned_personnel_id = p.id
     `, callback);
-    // db.query("SELECT * FROM complaints", callback);
   },
 
   assign: (id, personnel, callback) => {
