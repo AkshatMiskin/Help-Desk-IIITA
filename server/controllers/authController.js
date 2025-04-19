@@ -35,6 +35,7 @@ const login = (req, res) => {
     });
   });
 };
+
 const signup = async (req, res) => {
   const { name, email, password } = req.body;
   try {
