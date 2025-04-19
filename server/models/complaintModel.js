@@ -21,13 +21,25 @@ const Complaint = {
       attachments,
     } = complaint;
     const code = generateCode();
-    const sql = `
-      INSERT INTO complaints 
-      (name, email, priority, location, type, message, attachments, code) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    `;
+    const getComplaintTypeIdSql = `SELECT id FROM complaint_types WHERE type_name = ?`;
+    db.query(getComplaintTypeIdSql, [type], (err, results) => {
+      if (err) return callback(err);
 
-    db.query(sql, [name, email, priority, location, type, message, attachments, code], callback);
+      if (results.length === 0) {
+        return callback(new Error("Invalid complaint type"));
+      }
+
+      const complaint_type_id = results[0].id;
+
+      const insertSql = `
+        INSERT INTO complaints 
+        (name, email, priority, location, complaint_type_id, message, attachments, code) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+
+      db.query(insertSql, [name, email, priority, location, complaint_type_id, message, attachments, code], callback);
+    });
+
 
     
     await transporter.sendMail({

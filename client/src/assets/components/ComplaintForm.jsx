@@ -37,7 +37,7 @@ const TicketForm = () => {
       setFileName(file.name);
     }
   };
-
+  
   useEffect(() => {
     const fetchUserDetails = async () => {
       const token = localStorage.getItem("token");
@@ -66,8 +66,6 @@ const TicketForm = () => {
     fetchUserDetails();
   }, [categoryFromState]);
 
-  
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, priority, location, type, message } = formData;
@@ -92,6 +90,7 @@ const TicketForm = () => {
       });
   
       const data = await res.json();
+      console.log(data);
       if (data.success) {
         notifySuccess("Ticket submitted! Check your email for your 4-digit code.");
         setFormData({

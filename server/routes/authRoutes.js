@@ -6,7 +6,19 @@ const db = require("../config/db");
 
 router.post('/login', login);
 router.post('/signup', signup);
-
+router.get("/complaint_types", (req, res) => {
+  const query = "SELECT id, type_name FROM complaint_types";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error fetching complaint types:", err);
+      return res.status(500).json({ success: false, message: "Server error" });
+    }
+    res.json({
+      success: true,
+      complaintTypes: results,
+    });
+  });
+});
 router.get("/users/:email", (req, res) => {
   const { email } = req.params;
 
