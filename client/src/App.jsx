@@ -92,10 +92,8 @@ const App = () => {
             />
 
             <Route 
-              path="/signup" 
-              element={ isLoggedIn ? ( <Navigate to={isAdmin ? "/admin" : "/dashboard"} />
-              ) : ( <SignupForm onSignupSuccess={() => (window.location.href = "/login")} /> )
-            }
+              path="/signup"
+              element={ isLoggedIn ? <Navigate to={isAdmin ? "/admin" : "/login"} /> : <SignupForm /> }
             />
 
             {/* <Route

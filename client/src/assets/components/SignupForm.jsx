@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const SignupForm = ({ onSignupSuccess }) => {
+const SignupForm = () => {
   const [name, setName] = useState(""); // New state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const notifyError = (message) => {
     toast.error(message, {
       position: "top-right",
@@ -38,7 +39,8 @@ const SignupForm = ({ onSignupSuccess }) => {
       if (data.success) {
         localStorage.setItem("token", data.token);
         notifySuccess("Signup successful! You can now log in.");
-        onSignupSuccess();
+        // onSignupSuccess();
+        navigate("/login");
       } else {
         notifyError("Signup failed: " + data.message);
       }

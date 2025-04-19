@@ -6,6 +6,7 @@ const db = require("../config/db");
 
 router.post('/login', login);
 router.post('/signup', signup);
+
 router.get("/users/:email", (req, res) => {
   const { email } = req.params;
 
