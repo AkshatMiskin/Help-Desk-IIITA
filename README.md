@@ -95,5 +95,22 @@ CREATE TABLE complaint_types (
 ```
 ![Screenshot 2025-04-18 095448](https://github.com/user-attachments/assets/02b39f05-434f-49ac-a276-74919784eedd)
 
+## TABLE 5: FEEDBACK
+```sql
+CREATE TABLE feedback (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  complaint_id INT NOT NULL,
+  user_id INT NOT NULL,
+  assigned_personnel_id INT NOT NULL,
+  rating INT CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (complaint_id) REFERENCES complaints(id),
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (assigned_personnel_id) REFERENCES personnel(id)
+);
+```
+![Screenshot 2025-04-20 171609](https://github.com/user-attachments/assets/a236d33f-94fc-461e-b371-b2420567a13e)
+
 ## write random values in personnel table from sql
 ![image](https://github.com/user-attachments/assets/644da5f2-f6e8-47e8-a838-8e1eed050605)
