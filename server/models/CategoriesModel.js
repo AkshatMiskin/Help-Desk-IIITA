@@ -1,5 +1,5 @@
 const db = require("../config/db");
-
+// currently not in use
 const categories = [
   "Network",
   "Cleaning",
