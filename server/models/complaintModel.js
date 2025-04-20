@@ -5,8 +5,8 @@ const generateCode = () => Math.floor(1000 + Math.random() * 9000);
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL,         // Replace with your email
-    pass: process.env.PASSWORD,      // Use App Password if using Gmail
+    user: process.env.EMAIL,        
+    pass: process.env.PASSWORD,      
   },
 });
 const Complaint = {
@@ -53,8 +53,6 @@ db.query(getComplaintTypeIdSql, [type], (err, typeResults) => {
 });
 
 
-
-    
     await transporter.sendMail({
       from: "iit2023219@iiita.ac.in",
       to: email,
@@ -71,7 +69,11 @@ db.query(getComplaintTypeIdSql, [type], (err, typeResults) => {
       `,
     });
   },
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 9b48ac8ef3084ad38fd2288f33cbf776950fe3d4
   getAll: (callback) => {
     db.query(`
       SELECT 
