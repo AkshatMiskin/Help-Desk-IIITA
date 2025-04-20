@@ -29,31 +29,21 @@ npm run dev
 4. create these tables if not already in database
 ![Screenshot 2025-04-18 095415](https://github.com/user-attachments/assets/50ea5c13-6a1e-4b96-a3ff-020e4eb772e2)
 
-## TABLE 1: ADMIN
+
+## TABLE 1: USERS
 ```sql
-CREATE TABLE IF NOT EXISTS admin (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password VARCHAR(255) NOT NULL
+CREATE TABLE users (
+    id INT NOT NULL AUTO_INCREMENT,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255),
+    role ENUM('user', 'admin') NOT NULL DEFAULT 'user',
+    PRIMARY KEY (id)
 );
-
 ```
-![Screenshot 2025-04-18 095422](https://github.com/user-attachments/assets/e43386e6-4250-4687-8509-0cd4c751d9a1)
+![Screenshot 2025-04-20 151703](https://github.com/user-attachments/assets/14ef35bc-5441-4e7f-a1e7-18c2b13465c5)
 
-## TABLE 2: USERS
-```sql
-CREATE TABLE IF NOT EXISTS users (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-);
-
-```
-![Screenshot 2025-04-18 095429](https://github.com/user-attachments/assets/abe7a977-a549-4b78-b9ee-2d9b086b5867)
-
-## TABLE 3: PERSONNEL
+## TABLE 2: PERSONNEL
 ```sql
 CREATE TABLE personnel (
     id INT NOT NULL AUTO_INCREMENT,
@@ -66,7 +56,7 @@ CREATE TABLE personnel (
 ```
 ![Screenshot 2025-04-18 131254](https://github.com/user-attachments/assets/63f62589-56dd-4b9a-a5d0-279dd3c49e49)
 
-## TABLE 4: COMPLAINTS
+## TABLE 3: COMPLAINTS
 ```sql
 CREATE TABLE complaints (
   id int NOT NULL AUTO_INCREMENT,
@@ -95,7 +85,7 @@ CREATE TABLE complaints (
 ```
 ![Screenshot 2025-04-18 174738](https://github.com/user-attachments/assets/4dfb3a88-a04e-4356-82e2-e56c16b82d2f)
 
-## TABLE 5: COMPLAINT_TYPES
+## TABLE 4: COMPLAINT_TYPES
 ```sql
 CREATE TABLE complaint_types (
     id INT NOT NULL AUTO_INCREMENT,
