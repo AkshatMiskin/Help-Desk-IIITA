@@ -17,8 +17,6 @@ const TicketForm = () => {
   });
   const location = useLocation();
   const categoryFromState = location.state?.category || "";
-
-
   const notifyError = (message) => {
     toast.error(message, { position: "top-right", autoClose: 3000 });
   };

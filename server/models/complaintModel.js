@@ -69,11 +69,7 @@ db.query(getComplaintTypeIdSql, [type], (err, typeResults) => {
       `,
     });
   },
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> 9b48ac8ef3084ad38fd2288f33cbf776950fe3d4
   getAll: (callback) => {
     db.query(`
       SELECT 
