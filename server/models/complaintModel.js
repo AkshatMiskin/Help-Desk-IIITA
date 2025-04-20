@@ -22,23 +22,36 @@ const Complaint = {
     } = complaint;
     const code = generateCode();
     const getComplaintTypeIdSql = `SELECT id FROM complaint_types WHERE type_name = ?`;
-    db.query(getComplaintTypeIdSql, [type], (err, results) => {
-      if (err) return callback(err);
+db.query(getComplaintTypeIdSql, [type], (err, typeResults) => {
+  if (err) return callback(err);
+  if (typeResults.length === 0) {
+    return callback(new Error("Invalid complaint type"));
+  }
 
-      if (results.length === 0) {
-        return callback(new Error("Invalid complaint type"));
-      }
+  const complaint_type_id = typeResults[0].id;
 
-      const complaint_type_id = results[0].id;
+  const getUserIdSql = `SELECT id FROM users WHERE email = ?`;
+  db.query(getUserIdSql, [email], (err, userResults) => {
+    if (err) return callback(err);
+    if (userResults.length === 0) {
+      return callback(new Error("User not found"));
+    }
 
-      const insertSql = `
-        INSERT INTO complaints 
-        (name, email, priority, location, complaint_type_id, message, attachments, code) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-      `;
+    const user_id = userResults[0].id;
 
-      db.query(insertSql, [name, email, priority, location, complaint_type_id, message, attachments, code], callback);
-    });
+    const insertSql = `
+      INSERT INTO complaints 
+      (name, email, priority, location, complaint_type_id, message, attachments, code, user_id) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    db.query(
+      insertSql,
+      [name, email, priority, location, complaint_type_id, message, attachments, code, user_id],
+      callback
+    );
+  });
+});
+
 
 
     
@@ -59,16 +72,19 @@ const Complaint = {
     });
   },
 
-  // const result = await ;
-
   getAll: (callback) => {
     db.query(`
-      SELECT c.*, p.name AS assigned_name, p.contact AS assigned_contact
+      SELECT 
+        c.*, 
+        p.name AS assigned_name, 
+        p.contact AS assigned_contact,
+        ct.type_name AS complaint_type
       FROM complaints c
       LEFT JOIN personnel p ON c.assigned_personnel_id = p.id
+      LEFT JOIN complaint_types ct ON c.complaint_type_id = ct.id
     `, callback);
-    // db.query("SELECT * FROM complaints", callback);
   },
+  
 
   assign: (id, personnel, callback) => {
     const sql = `

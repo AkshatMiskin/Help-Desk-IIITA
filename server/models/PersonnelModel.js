@@ -18,8 +18,8 @@ const Personnel = {
   },
 
   addPersonnel: (person, callback) => {
-    const sql = `INSERT INTO personnel (name, contact, role, email, available) VALUES (?, ?, ?, ?, 1)`;
-    db.query(sql, [person.name, person.contact, person.role, person.email], callback);
+    const sql = `INSERT INTO personnel (name, contact, role, available) VALUES (?, ?, ?, 1)`;
+    db.query(sql, [person.name, person.contact, person.role], callback);
   }
 };
 
