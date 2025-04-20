@@ -153,17 +153,17 @@ const AdminDashboard = () => {
   
   return (
     <div className="min-h-screen w-full overflow-x-hidden  p-8">
-      <h2 className="text-4xl font-extrabold text-center text-indigo-400 mb-10">
-        Admin Dashboard
-      </h2>
+      <div className="flex items-center mb-10 w-full">
+        <h2 className="text-4xl font-extrabold text-indigo-400">Admin Dashboard</h2>
+      </div>
       <div className="flex justify-end mb-4">
-      <button
-        onClick={() => setAddPersonnelModal(true)}
-        className="bg-blue-600 cursor-pointer hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-xl transition"
-      >
-        + Add Personnel
-      </button>
-    </div>
+        <button
+            onClick={() => setAddPersonnelModal(true)}
+            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3 ml-auto rounded-lg transition"
+          >
+            + Add Personnel
+          </button>
+      </div>
 
       {complaints.filter(c => c.status !== "Resolved").length === 0 ? (
         <p className="text-center text-gray-300">No complaints found.</p>
