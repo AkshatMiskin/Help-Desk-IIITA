@@ -7,23 +7,19 @@ import {
 } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer } from "react-toastify";
-import LandingPage from "./assets/components/LandingPage";
-import LoginForm from "./assets/components/LoginForm";
-import SignupForm from "./assets/components/SignupForm";
-import ComplaintForm from "./assets/components/ComplaintForm";
-import AdminDashboard from "./assets/components/AdminDashboard";
-// import UserDashboard from "./assets/components/UserDashboard";
-import Header from "./assets/components/Header";
-import Footer from "./assets/components/Footer";
-import Track from "./assets/components/Track";
-import CategorySelection from "./assets/components/CategorySelection";
-import { useNavigate } from "react-router-dom";
-import UserDashboard from "./assets/components/UserDashboard";
+import LandingPage from "./components/LandingPage";
+import LoginForm from "./components/LoginForm";
+import SignupForm from "./components/SignupForm";
+import ComplaintForm from "./components/ComplaintForm";
+import AdminDashboard from "./components/AdminDashboard";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Track from "./components/Track";
+import UserDashboard from "./components/UserDashboard";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
-  // const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -83,34 +79,19 @@ const App = () => {
               path="/" 
               element={<LandingPage />} 
             />
-
             <Route 
               path="/login" 
-              element={isLoggedIn ? (<Navigate to={isAdmin ? "/admin" : "/dashboard"} />
-                ) : (<LoginForm onLogin={handleLogin} />)
+              element={isLoggedIn ? (<Navigate to={isAdmin ? "/admin" : "/dashboard"} />) : (<LoginForm onLogin={handleLogin} />)
               }
             />
-
             <Route 
               path="/signup"
               element={ isLoggedIn ? <Navigate to={isAdmin ? "/admin" : "/login"} /> : <SignupForm /> }
             />
-
-            {/* <Route
-              path="/dashboard"
-              element={isLoggedIn && !isAdmin ? <UserDashboard /> : <Navigate to="/" />}
-            /> */}
-
-            <Route 
-              path="/select-category" 
-              element={isLoggedIn && !isAdmin ?<CategorySelection /> : <Navigate to="/" />} 
-            />
-
             <Route
               path="/complaint"
               element={isLoggedIn && !isAdmin ? <ComplaintForm /> : <Navigate to="/" />}
             />
-
             <Route
               path="/admin"
               element={isAdmin && <AdminDashboard />}
@@ -119,7 +100,6 @@ const App = () => {
               path="/profile"
               element={isLoggedIn && !isAdmin && <UserDashboard />}
             />
-
             <Route
               path="/track"
               element={isLoggedIn && !isAdmin ? <Track /> : <Navigate to="/" />}
@@ -127,7 +107,6 @@ const App = () => {
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
-
         <Footer />
       </div>
     </Router>

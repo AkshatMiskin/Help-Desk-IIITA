@@ -9,11 +9,11 @@ const UserDashboard = () => {
   const [feedback, setFeedback] = useState({});
   const [activeFeedbackForm, setActiveFeedbackForm] = useState(null); // complaint.id of the open form
   const notifyError = (message) => {
-      toast.error(message, { position: "top-right", autoClose: 3000 });
-    };
-    const notifySuccess = (message) => {
-      toast.success(message, { position: "top-right", autoClose: 3000 });
-    };
+    toast.error(message, { position: "top-right", autoClose: 3000 });
+  };
+  const notifySuccess = (message) => {
+    toast.success(message, { position: "top-right", autoClose: 3000 });
+  };
   const handleFeedbackSubmit = async (complaint) => {
     const token = localStorage.getItem("token");
     const body = {
@@ -37,8 +37,7 @@ const UserDashboard = () => {
       const data = await res.json();
       if (data.success) {
         notifySuccess("Feedback submitted!");
-        
-        // Update feedback_given locally
+  
         setComplaints((prevComplaints) =>
           prevComplaints.map((c) =>
             c.id === complaint.id ? { ...c, feedback_given: true } : c
@@ -125,49 +124,42 @@ const UserDashboard = () => {
                 </p>
               )}
             </div>
-          
-            {/* Status Badge */}
-    <div className="absolute bottom-4 left-6 right-6 flex flex-col gap-2">
-      <div
-        className={`text-center font-semibold py-2 rounded-xl text-sm ${
-          complaint.status === "Resolved"
-            ? "bg-green-600 text-white"
-            : "bg-red-600 text-white"
-        }`}
-      >
-        {complaint.status}
-      </div>
 
-      {/* Show Feedback Button if applicable */}
-      {complaint.status === "Resolved" && !complaint.feedback_given && (
-        <>
-          <button
-            onClick={() =>
-              setActiveFeedbackForm(
-                activeFeedbackForm === complaint.id ? null : complaint.id
-              )
-            }
-            className="text-sm bg-indigo-500 hover:bg-indigo-600 text-white rounded-md py-1 px-3 transition"
-          >
-            {activeFeedbackForm === complaint.id ? "Cancel Feedback" : "Give Feedback"}
-          </button>
-
-      {/* Feedback Form  */}
-      {activeFeedbackForm === complaint.id && (
-          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
-            <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 text-gray-800 relative">
-
-              {/* Close Button */}
-              <button
-                onClick={() => setActiveFeedbackForm(null)}
-                className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
+            <div className="absolute bottom-4 left-6 right-6 flex flex-col gap-2">
+              <div
+                className={`text-center font-semibold py-2 rounded-xl text-sm ${
+                  complaint.status === "Resolved"
+                    ? "bg-green-600 text-white"
+                    : "bg-red-600 text-white"
+                }`}
               >
-                &times;
-              </button>
+                {complaint.status}
+              </div>
+
+              {complaint.status === "Resolved" && !complaint.feedback_given && (
+                <>
+                  <button
+                    onClick={() =>
+                      setActiveFeedbackForm(
+                        activeFeedbackForm === complaint.id ? null : complaint.id
+                      )
+                    }
+                    className="text-sm bg-indigo-500 hover:bg-indigo-600 text-white rounded-md py-1 px-3 transition"
+                  >
+                    {activeFeedbackForm === complaint.id ? "Cancel Feedback" : "Give Feedback"}
+                  </button>
+
+              {activeFeedbackForm === complaint.id && (
+                  <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+                    <div className="bg-white w-full max-w-md rounded-xl shadow-lg p-6 text-gray-800 relative">
+                      <button
+                        onClick={() => setActiveFeedbackForm(null)}
+                        className="absolute top-3 right-4 text-gray-500 hover:text-gray-700 text-xl"
+                      >
+                        &times;
+                      </button>
 
               <h3 className="text-xl font-bold text-indigo-600 mb-4">Leave Feedback</h3>
-
-              {/* Rating */}
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">Rating</label>
                 <select
@@ -192,7 +184,6 @@ const UserDashboard = () => {
                 </select>
               </div>
 
-              {/* Comment */}
               <div className="mb-4">
                 <label className="block text-sm font-medium mb-1">Comment</label>
                 <textarea
@@ -208,11 +199,9 @@ const UserDashboard = () => {
                       },
                     })
                   }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
-                />
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"/>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex justify-end">
                 <button
                   onClick={() => handleFeedbackSubmit(complaint)}
@@ -224,18 +213,12 @@ const UserDashboard = () => {
             </div>
           </div>
         )}
-
-
-    </>
-  )}
-</div>
-
-          </div>
-          
-          ))}
-        </div>
+        </>
       )}
-    </div>
+      </div>
+    </div>))}
+  </div>)}
+</div>
   );
 };
 

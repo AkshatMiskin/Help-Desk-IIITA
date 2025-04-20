@@ -1,20 +1,16 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Send, Ticket } from "lucide-react";
-import { Link } from "react-router-dom";
-import iiitaImage from "../iiita.jpeg"; // Relative path from assets/components
+import iiitaImage from "../assets/iiita.jpeg";
 
 const LandingPage = () => {
   const navigate = useNavigate();
-
   const handleNavigate = (path) => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate(path);
       localStorage.setItem("redirectAfterLogin", path);
     } else {
-      // Save the intended path to localStorage before redirecting to login
-      
       navigate("/login");
     }
   };
@@ -33,22 +29,17 @@ const LandingPage = () => {
         className="w-2xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto mb-10 rounded-lg shadow-lg object-cover"
       />
 
-
-
       <div className="flex gap-6">
-      
-      <button
-        onClick={() => handleNavigate("/select-category")}  // <-- updated this line
-        className="inline-flex cursor-pointer items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition"
-      >
-        <Send className="w-5 h-5" />
-        Submit a Ticket
-      </button>
+        <button
+          onClick={() => handleNavigate("/select-category")}  
+          className="inline-flex cursor-pointer items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl font-medium transition">
+          <Send className="w-5 h-5" />
+          Submit a Ticket
+        </button>
 
         <button
           onClick={() => handleNavigate("/track")}
-          className="inline-flex cursor-pointer items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-medium transition"
-        >
+          className="inline-flex cursor-pointer items-center gap-2 bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-xl font-medium transition">
           <Ticket className="w-5 h-5" />
           View Existing Ticket
         </button>
