@@ -23,8 +23,7 @@ const UserDashboard = () => {
       rating: feedback[complaint.id]?.rating,
       comment: feedback[complaint.id]?.comment,
     };
-    
-    
+  
     try {
       const res = await fetch("http://localhost:5000/api/feedback", {
         method: "POST",
@@ -45,7 +44,7 @@ const UserDashboard = () => {
         );
       
         setFeedback((prev) => ({ ...prev, [complaint.id]: {} }));
-        setActiveFeedbackForm(null); // Close the form
+        setActiveFeedbackForm(null); 
       } else {
         notifyError("Failed to submit feedback.");
       }

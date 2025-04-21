@@ -88,7 +88,6 @@ const TicketForm = () => {
       });
   
       const data = await res.json();
-      console.log(data);
       if (data.success) {
         notifySuccess("Ticket submitted! Check your email for your 4-digit code.");
         setFormData({

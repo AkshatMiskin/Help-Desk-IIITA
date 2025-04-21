@@ -16,7 +16,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Track from "./components/Track";
 import UserDashboard from "./components/UserDashboard";
-
+import CategorySelection from "./components/CategorySelection";
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -96,6 +96,10 @@ const App = () => {
               path="/admin"
               element={isAdmin && <AdminDashboard />}
             />
+            <Route 
+               path="/select-category" 
+               element={isLoggedIn && !isAdmin ?<CategorySelection /> : <Navigate to="/" />} 
+             />
             <Route
               path="/profile"
               element={isLoggedIn && !isAdmin && <UserDashboard />}
