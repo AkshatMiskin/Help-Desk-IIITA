@@ -140,6 +140,7 @@ const feedback = (req, res) => {
   }
 
   checkExistingFeedback(complaint_id, (err, existing) => {
+    console.log("already submitted");
     if (err) {
       console.error("Error checking existing feedback:", err);
       return res.status(500).json({ 

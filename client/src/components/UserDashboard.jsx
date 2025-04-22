@@ -16,6 +16,8 @@ const UserDashboard = () => {
   };
   const handleFeedbackSubmit = async (complaint) => {
     const token = localStorage.getItem("token");
+    // console.log(complaint);
+    console.log(complaints);
     const body = {
       complaint_id: complaint.id,
       user_id: complaint.user_id,
@@ -56,6 +58,7 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
+    
     const fetchComplaints = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -76,6 +79,7 @@ const UserDashboard = () => {
     };
 
     fetchComplaints();
+    
   }, []);
 
 
