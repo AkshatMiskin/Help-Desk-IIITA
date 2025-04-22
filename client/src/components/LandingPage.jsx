@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Send, Ticket } from "lucide-react";
 import iiitaImage from "../assets/iiita.jpeg";
+import { jwtDecode } from "jwt-decode";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = jwtDecode(token);
+      setUserName(decoded.name || "User");
+    }
+  }, []);
+  
   const handleNavigate = (path) => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -18,10 +28,12 @@ const LandingPage = () => {
   return (
     <div className="flex flex-col items-center justify-center text-center py-8 px-4 w-full">
       <h2 className="text-4xl sm:text-5xl font-bold text-indigo-400 mb-4">
-        Welcome to IIITA Help Desk
+        {userName ? `Welcome ${userName}` : "Welcome to IIITA Help Desk"}
       </h2>
       <p className="text-gray-300 max-w-2xl mb-8 text-lg">
-        A unified platform to raise and track complaints for your hostel, campus, and other facilities.
+        {userName ? "" : 
+          "A unified platform to raise and track complaints for your hostel, campus, and other facilities."
+        }
       </p>
       <img
         src={iiitaImage}

@@ -83,7 +83,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
               </div>
               <button
                 onClick={handleLogoutClick}
-                className="px-4 py-2 text-sm cursor-pointer font-medium text-white bg-red-500 hover:bg-red-600 rounded-full transition duration-200"
+                className="bg-[#b23b3b] px-4 py-2 text-sm cursor-pointer font-medium text-white  hover:bg-red-600 rounded-full transition duration-200"
               >
                 Logout
               </button>

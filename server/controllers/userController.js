@@ -3,7 +3,8 @@ const {
   findUserByEmail,
   getUserDetailsByEmail,
   checkExistingFeedback,
-  insertFeedback
+  insertFeedback,
+  markFeedbackGiven
 } = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
@@ -133,44 +134,54 @@ const feedback = (req, res) => {
   console.log("Received feedback submission:", req.body);
 
   if (!complaint_id || !user_id || !assigned_personnel_id || !rating) {
-    return res.status(400).json({ 
-      success: false, 
-      message: "Missing required fields." 
+    return res.status(400).json({
+      success: false,
+      message: "Missing required fields.",
     });
   }
 
   checkExistingFeedback(complaint_id, (err, existing) => {
-    console.log("already submitted");
     if (err) {
       console.error("Error checking existing feedback:", err);
-      return res.status(500).json({ 
-        success: false, 
-        message: "Server error." 
+      return res.status(500).json({
+        success: false,
+        message: "Server error while checking feedback.",
       });
     }
 
     if (existing.length > 0) {
-      return res.status(400).json({ 
-        success: false, 
-        message: "Feedback already submitted." 
+      return res.status(400).json({
+        success: false,
+        message: "Feedback already submitted.",
       });
     }
 
     insertFeedback(complaint_id, user_id, assigned_personnel_id, rating, comment, (err2) => {
       if (err2) {
         console.error("Error inserting feedback:", err2);
-        return res.status(500).json({ 
-          success: false, 
-          message: "Failed to submit feedback." 
+        return res.status(500).json({
+          success: false,
+          message: "Failed to submit feedback.",
         });
       }
 
-      return res.status(200).json({ 
-        success: true, 
-        message: "Feedback submitted successfully." 
+      markFeedbackGiven(complaint_id, (err3) => {
+        if (err3) {
+          console.error("Error updating complaint:", err3);
+          return res.status(500).json({
+            success: false,
+            message: "Feedback saved, but failed to update complaint status.",
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          message: "Feedback submitted successfully.",
+        });
       });
     });
   });
 };
+
 
 module.exports = { login, signup, userDetails, feedback };
