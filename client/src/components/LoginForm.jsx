@@ -88,7 +88,7 @@ const LoginForm = ({ onLogin }) => {
       </form>
 
       <div className="text-sm text-center text-gray-400 mt-8">
-        Don’t have an account?{" "}
+        Don't have an account?{" "}
         <a href="/signup" className="text-indigo-400 hover:underline font-medium">
           Sign Up
         </a>
@@ -98,8 +98,6 @@ const LoginForm = ({ onLogin }) => {
         Only authorized IIITA users allowed
       </p>
     </div>
-
-
   );
 };
 

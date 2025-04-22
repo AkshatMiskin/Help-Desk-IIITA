@@ -170,8 +170,7 @@ const AdminDashboard = () => {
       ) : (
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {complaints
-            .filter((complaint) => complaint.status !== "Resolved")
-            .map((complaint) => (
+            .filter((complaint) => complaint.status !== "Resolved").map((complaint) => (
               <div
                 key={complaint.id}
                 className="relative min-h-[320px] bg-gray-800 shadow-md rounded-2xl p-6 border border-gray-700 hover:shadow-lg transition"
@@ -190,10 +189,7 @@ const AdminDashboard = () => {
                     {complaint.priority}
                   </span>
                 </h3>
-
-
                 <div className="text-sm text-gray-300 space-y-4 mb-4">
-                  {/* User Info */}
                   <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
                     <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
                       <i className="fas fa-user"></i> User Info
@@ -202,8 +198,6 @@ const AdminDashboard = () => {
                     <p><span className="font-medium text-gray-200">Email:</span> {complaint.email}</p>
                     <p><span className="font-medium text-gray-200">Location:</span> {complaint.location}</p>
                   </div>
-
-                    {/* Complaint Details */}
                     <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
                       <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
                         <i className="fas fa-exclamation-circle"></i> Message
@@ -223,8 +217,6 @@ const AdminDashboard = () => {
                         </p>
                       )}
                     </div>
-
-                    {/* Assignment Info */}
                     <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
                       <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
                         <i className="fas fa-user-check"></i> Assigned Personnel
@@ -232,8 +224,6 @@ const AdminDashboard = () => {
                       <p><span className="font-medium text-gray-200">Name:</span> {complaint.assigned_name ?? "N/A"}</p>
                       <p><span className="font-medium text-gray-200">Contact:</span> {complaint.assigned_contact ?? "N/A"}</p>
                     </div>
-
-                    {/* Meta Info */}
                     <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
                       <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
                         <i className="fas fa-clock"></i> Meta Info
@@ -278,8 +268,6 @@ const AdminDashboard = () => {
         </div>
       )}
 
-
-      {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="relative bg-gray-800 p-8 rounded-2xl border border-gray-700 w-full max-w-md shadow-xl">
