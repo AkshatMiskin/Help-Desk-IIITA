@@ -28,7 +28,7 @@ npm run dev
 ```
 
 4. create these tables if not already in database
-![Screenshot 2025-04-18 095415](https://github.com/user-attachments/assets/50ea5c13-6a1e-4b96-a3ff-020e4eb772e2)
+![Screenshot 2025-04-22 205949](https://github.com/user-attachments/assets/04906911-9cfa-4484-86b5-28a3987772dc)
 
 
 ## TABLE 1: USERS
@@ -85,7 +85,7 @@ CREATE TABLE complaints (
 );
 
 ```
-![Screenshot 2025-04-18 174738](https://github.com/user-attachments/assets/4dfb3a88-a04e-4356-82e2-e56c16b82d2f)
+![Screenshot 2025-04-22 212424](https://github.com/user-attachments/assets/afa84be9-9b54-401c-9284-7256d178a31f)
 
 ## TABLE 4: COMPLAINT_TYPES
 ```sql
