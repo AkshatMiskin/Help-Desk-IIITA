@@ -12,6 +12,7 @@ Open your MySQL terminal or GUI and run:
 
 ```sql
 CREATE DATABASE iiita_helpdesk;
+use iiita_helpdesk;
 ```
 
 ```
@@ -68,12 +69,13 @@ CREATE TABLE complaints (
   location varchar(100) DEFAULT NULL,
   message text,
   attachments text,
-  complaint_type_id` int DEFAULT NULL,
+  complaint_type_id int DEFAULT NULL,
   assigned_personnel_id int DEFAULT NULL,
+  feedback_given BOOLEAN DEFAULT FALSE,
   user_id int DEFAULT NULL,
   type text,
   code varchar(10) DEFAULT NULL,
-  PRIMARY KEY (id`),
+  PRIMARY KEY (id),
   KEY fk_complaint_type (complaint_type_id),
   KEY fk_personnel (assigned_personnel_id),
   KEY fk_user (user_id),
