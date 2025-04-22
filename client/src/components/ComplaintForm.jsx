@@ -117,8 +117,7 @@ const TicketForm = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
           {[
-            ["Name", "name", "text"],
-            ["Email", "email", "email"],
+
             ["Type", "type", "text"],
           ].map(([label, name, type]) => (
             <div key={name}>
@@ -129,7 +128,7 @@ const TicketForm = () => {
                   value={formData[name]}
                   onChange={handleChange}
                   required
-                  readOnly={["name", "email", "type"].includes(name)} 
+                  readOnly={["type"].includes(name)} 
                   className="w-full px-5 py-3 bg-gray-900 text-white border border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-lg"
                 />
             </div>

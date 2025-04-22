@@ -46,12 +46,12 @@ const Complaint = {
 
         const insertSql = `
           INSERT INTO complaints 
-          (name, email, priority, location, complaint_type_id, message, attachments, code, user_id) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+          (priority, location, complaint_type_id, message, attachments, code, user_id) 
+          VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
         db.query(
           insertSql,
-          [name, email, priority, location, complaint_type_id, message, attachments, code, user_id],
+          [priority, location, complaint_type_id, message, attachments, code, user_id],
           (err, result) => {
             if (err) return callback(err);
             transporter.sendMail({
@@ -73,7 +73,16 @@ const Complaint = {
   },
 
   getUserComplaints: (email, callback) => {
-    db.query("SELECT * FROM complaints WHERE email = ?", [email], callback);
+    db.query("SELECT id FROM users WHERE email = ?", [email], (err, userResults) => {
+      if (err) {
+        return callback(err, null);
+      }
+      if (userResults.length === 0) {
+        return callback(new Error("User not found"), null);
+      }
+      const user_id = userResults[0].id; 
+      db.query("SELECT * FROM complaints WHERE user_id = ?", [user_id], callback);
+    });
   },
 
   assignPersonnel: (id, assignedName, assignedContact, callback) => {
