@@ -1,14 +1,22 @@
 const express = require("express");
 const router = express.Router();
-const complaintController = require("../controllers/complaintController");
+const {
+  submitComplaint,
+  getAllComplaints,
+  getUserComplaints,
+  assign,
+  resolvedComplaint,
+  track,
+  complaintTypes
+} = require("../controllers/complaintController");
 const upload = require("../middleware/upload");
 
-router.post("/complaints",  upload.array("attachments"), complaintController.submitComplaint);
-router.get("/complaints",  complaintController.getAllComplaints);
-router.post("/complaints/track", complaintController.trackTicket);
-router.patch("/complaints/:id",  complaintController.resolvedComplaint);
-router.put("/complaints/:id/assign",  complaintController.assignPersonnel);
-router.get("/complaints/user/:email", complaintController.getUserComplaints);
-router.get("/complaint_types", complaintController.complaintTypes);
+router.post("/complaints", upload.array("attachments"), submitComplaint);
+router.get("/complaints", getAllComplaints);
+router.post("/complaints/track", track);
+router.patch("/complaints/:id", resolvedComplaint);
+router.put("/complaints/:id/assign", assign);
+router.get("/complaints/user/:email", getUserComplaints);
+router.get("/complaint_types", complaintTypes);
 
 module.exports = router;

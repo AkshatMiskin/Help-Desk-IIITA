@@ -1,6 +1,14 @@
-const Complaint = require('../models/complaintModel');
+const {
+  createComplaint,
+  getAll,
+  getUserComplaint,
+  assignPersonnel,
+  markResolved,
+  trackTicket,
+  getComplaintTypes
+} = require('../models/complaintModel');
 
-exports.submitComplaint = (req, res) => {
+const submitComplaint = (req, res) => {
   const { name, email, priority, location, type, message } = req.body;
   const attachments = req.files?.map((file) => file.filename).join(",") || "";
 
@@ -14,7 +22,7 @@ exports.submitComplaint = (req, res) => {
 
   const complaint = { name, email, priority, location, type, message, attachments };
 
-  Complaint.createComplaint(complaint, (err) => {
+  createComplaint(complaint, (err) => {
     if (err) return res.status(500).json({ 
       success: false, 
       message: err.message || 'Error submitting complaint' 
@@ -27,8 +35,8 @@ exports.submitComplaint = (req, res) => {
   });
 };
 
-exports.getAllComplaints = (req, res) => {
-  Complaint.getAll((err, results) => {
+const getAllComplaints = (req, res) => {
+  getAll((err, results) => {
     if (err) return res.status(500).json({ 
       success: false, 
       message: "Failed to fetch complaints" 
@@ -41,9 +49,9 @@ exports.getAllComplaints = (req, res) => {
   });
 };
 
-exports.getUserComplaints = (req, res) => {
+const getUserComplaints = (req, res) => {
   const { email } = req.params;
-  Complaint.getUserComplaints(email, (err, results) => {
+  getUserComplaint(email, (err, results) => {
     if (err) return res.status(500).json({ 
       success: false, 
       message: "Error fetching user complaints" 
@@ -55,7 +63,7 @@ exports.getUserComplaints = (req, res) => {
   });
 };
 
-exports.assignPersonnel = (req, res) => {
+const assign = (req, res) => {
   const id = req.params.id;
   const { assignedName, assignedContact } = req.body;
 
@@ -67,7 +75,7 @@ exports.assignPersonnel = (req, res) => {
     });
   }
 
-  Complaint.assignPersonnel(id, assignedName, assignedContact, (err, success) => {
+  assignPersonnel(id, assignedName, assignedContact, (err, success) => {
     if (err) return res.status(500).json({ 
       success: false, 
       message: "Failed to assign personnel" 
@@ -83,9 +91,9 @@ exports.assignPersonnel = (req, res) => {
   });
 };
 
-exports.resolvedComplaint = (req, res) => {
+const resolvedComplaint = (req, res) => {
   const { id } = req.params;
-  Complaint.markResolved(id, (err) => {
+  markResolved(id, (err) => {
     if (err) return res.status(500).json({ 
       success: false, 
       message: "Failed to resolve complaint" 
@@ -97,7 +105,7 @@ exports.resolvedComplaint = (req, res) => {
   });
 };
 
-exports.trackTicket = (req, res) => {
+const track = (req, res) => {
   const { email, code } = req.body;
   if (!email || !code) {
     return res.status(400).json({ 
@@ -106,7 +114,7 @@ exports.trackTicket = (req, res) => {
     });
   }
 
-  Complaint.trackTicket(email, code, (err, results) => {
+  trackTicket(email, code, (err, results) => {
     if (err) return res.status(500).json({ 
       success: false, 
       error: err 
@@ -128,8 +136,8 @@ exports.trackTicket = (req, res) => {
   });
 };
 
-exports.complaintTypes = (req, res) => {
-  Complaint.getComplaintTypes((err, results) => {
+const complaintTypes = (req, res) => {
+  getComplaintTypes((err, results) => {
     if (err) return res.status(500).json({ 
       success: false, 
       message: "Server error" 
@@ -140,3 +148,13 @@ exports.complaintTypes = (req, res) => {
     });
   });
 };
+
+module.exports = {
+  submitComplaint,
+  getAllComplaints,
+  getUserComplaints,
+  assign,
+  resolvedComplaint,
+  track,
+  complaintTypes
+}

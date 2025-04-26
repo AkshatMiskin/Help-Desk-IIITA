@@ -6,6 +6,7 @@ const {
   insertFeedback,
   markFeedbackGiven
 } = require('../models/userModel');
+
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 const bcrypt = require('bcrypt');
@@ -184,4 +185,9 @@ const feedback = (req, res) => {
 };
 
 
-module.exports = { login, signup, userDetails, feedback };
+module.exports = { 
+  login, 
+  signup, 
+  userDetails, 
+  feedback 
+};

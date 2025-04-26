@@ -14,6 +14,7 @@ const getUserDetailsByEmail = (email, callback) => {
   const query = "SELECT name, email FROM users WHERE email = ?";
   db.query(query, [email], callback);
 };
+
 const checkExistingFeedback = (complaint_id, callback) => {
   const query = "SELECT id FROM feedback WHERE complaint_id = ?";
   db.query(query, [complaint_id], callback);
