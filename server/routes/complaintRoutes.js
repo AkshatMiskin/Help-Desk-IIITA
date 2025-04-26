@@ -9,7 +9,7 @@ const {
   track,
   complaintTypes
 } = require("../controllers/complaintController");
-const upload = require("../middleware/upload");
+const upload = require("../utils/upload");
 
 router.post("/complaints", upload.array("attachments"), submitComplaint);
 router.get("/complaints", getAllComplaints);
