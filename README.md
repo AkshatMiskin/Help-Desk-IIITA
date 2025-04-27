@@ -111,5 +111,6 @@ CREATE TABLE feedback (
 ```
 ![Screenshot 2025-04-20 171609](https://github.com/user-attachments/assets/a236d33f-94fc-461e-b371-b2420567a13e)
 
-## write random values in personnel table from sql
-![image](https://github.com/user-attachments/assets/644da5f2-f6e8-47e8-a838-8e1eed050605)
+## CLASS DIAGRAM
+![Screenshot 2025-04-27 163356](https://github.com/user-attachments/assets/e10f681e-217a-4ec1-8155-5038b91f88fb)
+
