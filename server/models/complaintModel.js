@@ -46,7 +46,6 @@ const createComplaint = async (complaint, callback) => {
   );
 };
 
-
 const getUserComplaint = (email, callback) => {
   db.query("SELECT id FROM users WHERE email = ?", [email], (err, userResults) => {
     if (err) {

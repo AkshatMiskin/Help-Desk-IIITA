@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+
 const LoginForm = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const notifyError = (message) => {
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    };
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
   
   const notifySuccess = (message) => {
     toast.success(message, {

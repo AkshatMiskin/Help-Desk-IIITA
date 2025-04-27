@@ -11,12 +11,11 @@ const {
 } = require("../controllers/complaintController");
 const upload = require("../utils/upload");
 
-router.post("/complaints", upload.array("attachments"), submitComplaint);
 router.get("/complaints", getAllComplaints);
-router.post("/complaints/track", track);
-router.patch("/complaints/:id", resolvedComplaint);
-router.put("/complaints/:id/assign", assign);
-router.get("/complaints/user/:email", getUserComplaints);
 router.get("/complaint_types", complaintTypes);
-
+router.get("/complaints/user/:email", getUserComplaints);
+router.put("/complaints/:id/assign", assign);
+router.patch("/complaints/:id", resolvedComplaint);
+router.post("/complaints/track", track);
+router.post("/complaints", upload.array("attachments"), submitComplaint);
 module.exports = router;
