@@ -4,5 +4,5 @@ DB_PASSWORD=asim
 DB_NAME=iiita_helpdesk
 DB_PORT=3306
 SECRET_KEY=flkajdklfjkajlsdfjlasdfjqrouonkeoukalutokgaknvlaseituhglaoi
-EMAIL="iit2023219@iiita.ac.in"
-PASSWORD="uooi ebvn oxtj wiyd"
+EMAIL=nodemailer-mail
+PASSWORD=nodemailer-pw
