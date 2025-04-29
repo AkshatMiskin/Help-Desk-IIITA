@@ -177,7 +177,7 @@ const AdminDashboard = () => {
                   ${
                     complaint.assigned_personnel_id || complaint.status === "Assigned"
                       ? "border-green-800 border-4"
-                      : "bg-gray-800 border-gray-700 border"
+                      : "bg-gray-800 border-red-700 border-3"
                   }`}
               >
                 <h3 className="text-xl font-semibold text-indigo-400 mb-2 flex items-center justify-between">

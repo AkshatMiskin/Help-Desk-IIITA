@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import FloatingIcons from "./ui/FloatingIcons";
 
 const SignupForm = () => {
   const [name, setName] = useState(""); // New state
@@ -52,6 +53,7 @@ const SignupForm = () => {
 
   return (
     <div className="w-full max-w-2xl bg-gray-800 p-12 rounded-3xl shadow-2xl border border-gray-700">
+      <FloatingIcons />
       <div className="text-center mb-10">
         <h1 className="text-5xl font-extrabold text-indigo-400">IIITA Help Desk</h1>
         <h2 className="text-2xl font-medium text-gray-300 mt-4">Create an Account</h2>

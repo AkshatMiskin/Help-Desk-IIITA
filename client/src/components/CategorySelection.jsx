@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import FloatingIcons from "./ui/FloatingIcons";
 
 const categories = [
   "Network",
@@ -18,6 +19,7 @@ const CategorySelection = () => {
 
   return (
     <div className="flex flex-col items-center justify-center px-4">
+      <FloatingIcons />
       <h2 className="text-2xl sm:text-3xl font-semibold text-indigo-400 mb-6">
         What can we help you with?
       </h2>

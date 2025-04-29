@@ -109,7 +109,7 @@ const UserDashboard = () => {
                   {complaint.type}
                 </h3>
 
-                {complaint.feedback_given && (
+                {complaint.feedback_given &&  (
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => (
                       <svg
@@ -229,7 +229,7 @@ const UserDashboard = () => {
                                         feedback[complaint.id]?.rating >= star ? "text-yellow-400" : "text-gray-400"
                                       }`}
                                       xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 0 24 24" // Adjusting viewBox for better size scaling
+                                      viewBox="0 0 24 24" 
                                       fill="currentColor"
                                       aria-hidden="true"
                                     >

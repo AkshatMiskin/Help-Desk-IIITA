@@ -17,6 +17,9 @@ import Footer from "./components/Footer";
 import Track from "./components/Track";
 import UserDashboard from "./components/UserDashboard";
 import CategorySelection from "./components/CategorySelection";
+import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -107,6 +110,14 @@ const App = () => {
             <Route
               path="/track"
               element={isLoggedIn && !isAdmin ? <Track /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/forgot-password"
+              element={<ForgotPassword />}
+            />
+            <Route 
+              path="/reset-password/:token" 
+              element={<ResetPassword />} 
             />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
