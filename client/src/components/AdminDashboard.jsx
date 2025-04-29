@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ExclamationMark from "../assets/ExclamationMark";
+import AddUser from "../assets/AddUser";
+import Person from "../assets/Person";
+import Document from "../assets/Document";
+import Chat from "../assets/Chat";
+import Microphone from "../assets/Microphone";
+import Group from "../assets/Group";
+import Success from "../assets/Success";
 
 const AdminDashboard = () => {
   const [complaints, setComplaints] = useState([]);
@@ -153,9 +161,7 @@ const AdminDashboard = () => {
                 onClick={() => setAddPersonnelModal(true)}
                 className="bg-white text-indigo-800 hover:bg-indigo-100 font-medium py-2 px-4 rounded-lg transition flex items-center"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM16 8a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V8z" />
-                </svg>
+                <AddUser />
                 Add Personnel
               </button>
             </div>
@@ -191,9 +197,7 @@ const AdminDashboard = () => {
         {/* Complaints list */}
         {filteredComplaints.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 bg-gray-800 rounded-xl">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-            </svg>
+            <Document />
             <p className="text-lg text-gray-400">No {filterStatus.toLowerCase()} complaints found.</p>
           </div>
         ) : (
@@ -241,9 +245,7 @@ const AdminDashboard = () => {
                   {/* User info section */}
                   <div className="flex items-start space-x-3">
                     <div className="p-2 bg-indigo-500/10 rounded-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                      </svg>
+                      <Person />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-sm font-medium text-indigo-400">User Details</h3>
@@ -256,9 +258,7 @@ const AdminDashboard = () => {
                   {/* Message section */}
                   <div className="flex items-start space-x-3">
                     <div className="p-2 bg-indigo-500/10 rounded-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                      </svg>
+                      <Chat />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-sm font-medium text-indigo-400">Message</h3>
@@ -270,9 +270,7 @@ const AdminDashboard = () => {
                           rel="noopener noreferrer"
                           className="text-xs flex items-center text-indigo-400 hover:text-indigo-300 mt-1"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clipRule="evenodd" />
-                          </svg>
+                          <Microphone />
                           View Attachment
                         </a>
                       )}
@@ -282,9 +280,7 @@ const AdminDashboard = () => {
                   {/* Personnel section */}
                   <div className="flex items-start space-x-3">
                     <div className="p-2 bg-indigo-500/10 rounded-lg">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-                      </svg>
+                      <Group />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-sm font-medium text-indigo-400">Assigned Personnel</h3>
@@ -313,9 +309,7 @@ const AdminDashboard = () => {
                         onClick={() => resolve(complaint.id)}
                         className="w-full flex justify-center items-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
+                        <Success />
                         Mark as Resolved
                       </button>
                     ) : (
@@ -323,9 +317,7 @@ const AdminDashboard = () => {
                         onClick={() => openAssignModal(complaint.id, complaint.complaint_type)}
                         className="w-full flex justify-center items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                          <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                        </svg>
+                        <AddUser />
                         Assign Personnel
                       </button>
                     )
@@ -370,9 +362,7 @@ const AdminDashboard = () => {
               
               {availablePersonnel.length === 0 && (
                 <div className="mt-2 p-3 bg-red-900/20 text-red-400 text-sm rounded-lg flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
+                  <ExclamationMark />
                   No available personnel match this complaint type
                 </div>
               )}
