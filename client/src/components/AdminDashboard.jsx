@@ -60,7 +60,6 @@ const AdminDashboard = () => {
     try {
       const res = await fetch("http://localhost:5000/api/complaints");
       const data = await res.json();
-      console.log(data);
       if (data.success) {
         setComplaints(data.data);
       } else {
@@ -174,7 +173,12 @@ const AdminDashboard = () => {
             .filter((complaint) => complaint.status !== "Resolved").map((complaint) => (
               <div
                 key={complaint.id}
-                className="relative min-h-[320px] bg-gray-800 shadow-md rounded-2xl p-6 border border-gray-700 hover:shadow-lg transition"
+                className={`relative min-h-[320px] shadow-md rounded-2xl p-6 border hover:shadow-lg transition
+                  ${
+                    complaint.assigned_personnel_id || complaint.status === "Assigned"
+                      ? "border-green-800 border-4"
+                      : "bg-gray-800 border-gray-700 border"
+                  }`}
               >
                 <h3 className="text-xl font-semibold text-indigo-400 mb-2 flex items-center justify-between">
                   <span>{complaint.complaint_type}</span>

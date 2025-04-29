@@ -79,7 +79,7 @@ const sendTicketSubmissionMail = (email, name, type, code) => {
  * @param {string} code - Ticket code
  * @returns {string} - HTML string
  */
-const generateAssignedPersonnelHTML = (name, type, assignedName, assignedContact, code) => {
+const generateAssignedPersonnelHTML = (name, type, assignedName, assignedContact) => {
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px;">
       <h2 style="color: #4f46e5;">Personnel Assigned to Your Complaint</h2>
@@ -87,7 +87,6 @@ const generateAssignedPersonnelHTML = (name, type, assignedName, assignedContact
       <p>A personnel has been assigned to your complaint regarding <span style="font-size: 1.2rem; color: rgb(239, 51, 67);">${type}</span>.</p>
       <p><strong>Assigned Personnel:</strong> <span style="font-size: 1.1rem; color: #333;">${assignedName}</span></p>
       <p><strong>Contact:</strong> <span style="font-size: 1.1rem; color: #333;">${assignedContact}</span></p>
-      <p><strong>Your Ticket Code:</strong> <span style="font-size: 1.2rem; color: #4f46e5;">${code}</span></p>
       <p style="margin-top: 20px;">Please feel free to reach out to the assigned personnel for any assistance.</p>
       <br>
       <p style="font-size: 0.9rem; color: gray;">Thank you,<br>IIITA Help Desk Team</p>
@@ -95,9 +94,8 @@ const generateAssignedPersonnelHTML = (name, type, assignedName, assignedContact
   `;
 };
 
-const adminAssignedPersonnelMail = (email, name, type, assignedName, assignedContact, code) => {
-  const htmlAssigned = generateAssignedPersonnelHTML(name, type, assignedName, assignedContact, code);
-
+const adminAssignedPersonnelMail = (email, name, type, assignedName, assignedContact) => {
+  const htmlAssigned = generateAssignedPersonnelHTML(name, type, assignedName, assignedContact);
   return sendMail({
     to:email,
     subject: "IIITA Help Desk - Personnel Assigned",

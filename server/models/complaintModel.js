@@ -1,7 +1,7 @@
 const db = require("../config/db");
 require("dotenv").config();
 const generateCode = () => Math.floor(1000 + Math.random() * 9000);
-const { sendTicketSubmissionMail, complaintResolvedMail } = require("../utils/mailer");
+const { sendTicketSubmissionMail, adminAssignedPersonnelMail, complaintResolvedMail } = require("../utils/mailer");
 
 const getAll = (callback) => {
   const sql = `
@@ -78,17 +78,30 @@ const assignPersonnel = (id, assignedName, assignedContact, callback) => {
       const updatePersonnel = `UPDATE personnel SET available = 0 WHERE id = ?`;
       db.query(updatePersonnel, [personnelId], (err3) => {
         if (err3) return callback(err3);
-        callback(null, true);
+
+        const getUserDetails = `
+          SELECT u.name, u.email, ct.type_name
+          FROM complaints c
+          JOIN users u ON c.user_id = u.id
+          JOIN complaint_types ct ON c.complaint_type_id = ct.id
+          WHERE c.id = ?
+        `;
+
+        db.query(getUserDetails, [id], (err4, result2) => {
+          if (err4) return callback(err4);
+          if (result2.length === 0) return callback(null, true); // fallback if no user info
+
+          const { name, email, type_name } = result2[0];
+
+          adminAssignedPersonnelMail(email, name, type_name, assignedName, assignedContact)
+            .then(() => callback(null, true))
+            .catch(mailErr => callback(mailErr));
+        });
       });
     });
   });
 };
 
-// SELECT u.name, u.email, ct.type_name 
-//     FROM complaints c
-//     JOIN users u ON c.user_id = u.id
-//     JOIN complaint_types ct ON c.complaint_type_id = ct.id
-//     WHERE c.id = 9;
 const markResolved = (id, callback) => {
   const getComplaintDetails = `
     SELECT c.assigned_personnel_id, c.user_id, u.name, u.email, ct.type_name
@@ -97,7 +110,6 @@ const markResolved = (id, callback) => {
     JOIN complaint_types ct ON c.complaint_type_id = ct.id
     WHERE c.id = ?
   `;
-  // const getPersonnel = "SELECT assigned_personnel_id FROM complaints WHERE id = ?";
   db.query(getComplaintDetails, [id], (err, result) => {
     if (err || result.length === 0) return callback(err || new Error("Complaint not found"));
 
@@ -126,13 +138,6 @@ const markResolved = (id, callback) => {
           console.error("Failed to send resolved mail:", mailErr);
           callback(mailErr);
         });
-
-      // if (personnelId) {
-      //   const updatePersonnel = "UPDATE personnel SET available = 1 WHERE id = ?";
-      //   db.query(updatePersonnel, [personnelId], callback);
-      // } else {
-      //   callback(null, true);
-      // }
     });
   });
 };
@@ -143,8 +148,9 @@ const trackTicket = (email, code, callback) => {
             p.name AS personnel_name, 
             p.contact AS personnel_contact 
     FROM complaints c 
+    JOIN users u ON c.user_id = u.id
     LEFT JOIN personnel p ON c.assigned_personnel_id = p.id 
-    WHERE c.email = ? AND c.code = ?
+    WHERE u.email = ? AND c.code = ?
   `;
   db.query(sql, [email, code], callback);
 };

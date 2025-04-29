@@ -132,7 +132,6 @@ const userDetails = (req, res) => {
 
 const feedback = (req, res) => {
   const { complaint_id, user_id, assigned_personnel_id, rating, comment } = req.body;
-  console.log("Received feedback submission:", req.body);
 
   if (!complaint_id || !user_id || !assigned_personnel_id || !rating) {
     return res.status(400).json({
