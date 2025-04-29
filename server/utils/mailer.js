@@ -1,4 +1,3 @@
-// utils/mailer.js
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -45,7 +44,7 @@ const generateTicketSubmissionHTML = (name, type, code) => {
       <h2 style="color: #4f46e5;">Your Ticket Has Been Submitted</h2>
       <p>Hi <span style="font-size: 1.1rem; color: rgb(85, 235, 15);">${name}</span>,</p>
       <p>Your complaint regarding <span style="font-size: 1.2rem; color: rgb(239, 51, 67);">${type}</span> has been recorded.</p>
-      <p><strong>Your Ticket Code:</strong> <span style="font-size: 1.2rem; color: #4f46e5;">${code}</span></p>
+      <p><strong>Your Ticket Code:</strong> <span style="font-size: 1.2rem; color: #4f46e5;">${code}</span> You can track complaint status using this ticket number.</p>
       <p style="margin-top: 20px;">We will get back to you shortly.</p>
       <br>
       <p style="font-size: 0.9rem; color: gray;">Thank you,<br>IIITA Help Desk Team</p>
@@ -71,4 +70,82 @@ const sendTicketSubmissionMail = (email, name, type, code) => {
   });
 };
 
-module.exports = { sendMail, sendTicketSubmissionMail };
+/**
+ * Generates the HTML content for personnel assignment email
+ * @param {string} name - User's name
+ * @param {string} type - Complaint type
+ * @param {string} assignedName - Name of the assigned personnel
+ * @param {string} assignedContact - Contact of the assigned personnel
+ * @param {string} code - Ticket code
+ * @returns {string} - HTML string
+ */
+const generateAssignedPersonnelHTML = (name, type, assignedName, assignedContact, code) => {
+  return `
+    <div style="font-family: Arial, sans-serif; padding: 20px;">
+      <h2 style="color: #4f46e5;">Personnel Assigned to Your Complaint</h2>
+      <p>Hi <span style="font-size: 1.1rem; color: rgb(85, 235, 15);">${name}</span>,</p>
+      <p>A personnel has been assigned to your complaint regarding <span style="font-size: 1.2rem; color: rgb(239, 51, 67);">${type}</span>.</p>
+      <p><strong>Assigned Personnel:</strong> <span style="font-size: 1.1rem; color: #333;">${assignedName}</span></p>
+      <p><strong>Contact:</strong> <span style="font-size: 1.1rem; color: #333;">${assignedContact}</span></p>
+      <p><strong>Your Ticket Code:</strong> <span style="font-size: 1.2rem; color: #4f46e5;">${code}</span></p>
+      <p style="margin-top: 20px;">Please feel free to reach out to the assigned personnel for any assistance.</p>
+      <br>
+      <p style="font-size: 0.9rem; color: gray;">Thank you,<br>IIITA Help Desk Team</p>
+    </div>
+  `;
+};
+
+const adminAssignedPersonnelMail = (email, name, type, assignedName, assignedContact, code) => {
+  const htmlAssigned = generateAssignedPersonnelHTML(name, type, assignedName, assignedContact, code);
+
+  return sendMail({
+    to:email,
+    subject: "IIITA Help Desk - Personnel Assigned",
+    html: htmlAssigned,
+  })
+};
+
+/**
+ * Generates the HTML content for complaint resolution email
+ * @param {string} name - User's name
+ * @param {string} type - Complaint type
+ * @param {string} code - Ticket code
+ * @returns {string} - HTML string
+ */
+const generateComplaintResolvedHTML = (name, type) => {
+  return `
+    <div style="font-family: Arial, sans-serif; padding: 20px;">
+      <h2 style="color: #4f46e5;">Your Complaint Has Been Resolved</h2>
+      <p>Hi <span style="font-size: 1.1rem; color: rgb(85, 235, 15);">${name}</span>,</p>
+      <p>We are pleased to inform you that your complaint regarding 
+      <span style="font-size: 1.2rem; color: rgb(239, 51, 67);">${type}</span> 
+      has been resolved.</p>
+      <p style="margin-top: 20px;">If you believe the issue is not fully resolved, you can reopen the ticket or contact support.</p>
+      <br>
+      <p style="font-size: 0.9rem; color: gray;">Thank you for your patience, you can give feedback from your dashboard itself<br>IIITA Help Desk Team</p>
+    </div>
+  `;
+};
+/**
+ * Sends an email to notify user that complaint has been resolved
+ * @param {string} email - Receiver's email
+ * @param {string} name - User's name
+ * @param {string} type - Complaint type
+ * @param {string} code - Ticket code
+ * @returns {Promise}
+ */
+const complaintResolvedMail = (email, name, type) => {
+  const htmlResolved = generateComplaintResolvedHTML(name, type);
+  return sendMail({
+    to: email,
+    subject: "IIITA Help Desk - Complaint Resolved",
+    html: htmlResolved,
+  });
+};
+
+module.exports = { 
+  sendMail, 
+  sendTicketSubmissionMail, 
+  adminAssignedPersonnelMail, 
+  complaintResolvedMail,
+};

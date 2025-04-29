@@ -39,7 +39,7 @@ const AdminDashboard = () => {
       const data = await res.json();
   
       if (res.ok && data.success) {
-        notifySuccess(data.message || "Complaint marked as resolved");
+        notifySuccess(data.message || "Complaint marked as resolved and email sent to user");
   
         // Remove the resolved complaint from UI without re-fetch
         setComplaints(prev => prev.filter(c => c.id !== id));

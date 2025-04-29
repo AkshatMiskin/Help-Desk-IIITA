@@ -1,7 +1,7 @@
 const db = require("../config/db");
 require("dotenv").config();
 const generateCode = () => Math.floor(1000 + Math.random() * 9000);
-const { sendTicketSubmissionMail } = require("../utils/mailer");
+const { sendTicketSubmissionMail, complaintResolvedMail } = require("../utils/mailer");
 
 const getAll = (callback) => {
   const sql = `
@@ -84,23 +84,55 @@ const assignPersonnel = (id, assignedName, assignedContact, callback) => {
   });
 };
 
+// SELECT u.name, u.email, ct.type_name 
+//     FROM complaints c
+//     JOIN users u ON c.user_id = u.id
+//     JOIN complaint_types ct ON c.complaint_type_id = ct.id
+//     WHERE c.id = 9;
 const markResolved = (id, callback) => {
-  const getPersonnel = "SELECT assigned_personnel_id FROM complaints WHERE id = ?";
-  db.query(getPersonnel, [id], (err, result) => {
+  const getComplaintDetails = `
+    SELECT c.assigned_personnel_id, c.user_id, u.name, u.email, ct.type_name
+    FROM complaints c
+    JOIN users u ON c.user_id = u.id
+    JOIN complaint_types ct ON c.complaint_type_id = ct.id
+    WHERE c.id = ?
+  `;
+  // const getPersonnel = "SELECT assigned_personnel_id FROM complaints WHERE id = ?";
+  db.query(getComplaintDetails, [id], (err, result) => {
     if (err || result.length === 0) return callback(err || new Error("Complaint not found"));
 
-    const personnelId = result[0].assigned_personnel_id;
+    const {
+      assigned_personnel_id: personnelId,
+      name,
+      email,
+      type_name: type,
+    } = result[0];
+
     const updateComplaint = "UPDATE complaints SET status = 'Resolved' WHERE id = ?";
 
     db.query(updateComplaint, [id], (err) => {
       if (err) return callback(err);
+      
+      complaintResolvedMail(email, name, type)
+        .then(() => {
+          if (personnelId) {
+            const updatePersonnel = "UPDATE personnel SET available = 1 WHERE id = ?";
+            db.query(updatePersonnel, [personnelId], callback);
+          } else {
+            callback(null, true);
+          }
+        })
+        .catch((mailErr) => {
+          console.error("Failed to send resolved mail:", mailErr);
+          callback(mailErr);
+        });
 
-      if (personnelId) {
-        const updatePersonnel = "UPDATE personnel SET available = 1 WHERE id = ?";
-        db.query(updatePersonnel, [personnelId], callback);
-      } else {
-        callback(null, true);
-      }
+      // if (personnelId) {
+      //   const updatePersonnel = "UPDATE personnel SET available = 1 WHERE id = ?";
+      //   db.query(updatePersonnel, [personnelId], callback);
+      // } else {
+      //   callback(null, true);
+      // }
     });
   });
 };
