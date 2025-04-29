@@ -11,44 +11,29 @@ const AdminDashboard = () => {
   const [availablePersonnel, setAvailablePersonnel] = useState([]);
   const [addPersonnelModal, setAddPersonnelModal] = useState(false);
   const [newPersonnel, setNewPersonnel] = useState({
-    name: "",
-    contact: "",
-    role: "",
+    name: "", contact: "", role: "",
   });
+  const [filterStatus, setFilterStatus] = useState("Active");
 
-  const notifyError = (message) => {
-    toast.error(message, {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
-
-  const notifySuccess = (message) => {
-    toast.success(message, {
-      position: "top-right",
-      autoClose: 3000,
-    });
+  const notify = (message, type = "success") => {
+    toast[type](message, { position: "top-right", autoClose: 3000 });
   };
 
   const resolve = async (id) => {
     try {
       const res = await fetch(`http://localhost:5000/api/complaints/${id}`, {
-        method: "PATCH", // changed from DELETE
+        method: "PATCH",
       });
-  
       const data = await res.json();
-  
       if (res.ok && data.success) {
-        notifySuccess(data.message || "Complaint marked as resolved and email sent to user");
-  
-        // Remove the resolved complaint from UI without re-fetch
+        notify(data.message || "Complaint resolved and email sent to user");
         setComplaints(prev => prev.filter(c => c.id !== id));
       } else {
-        notifyError(data.message || "Failed to mark as resolved");
+        notify(data.message || "Failed to resolve", "error");
       }
     } catch (error) {
       console.error("Error resolving complaint:", error);
-      notifyError("An error occurred while resolving the complaint.");
+      notify("Error resolving complaint", "error");
     }
   };
   
@@ -63,11 +48,11 @@ const AdminDashboard = () => {
       if (data.success) {
         setComplaints(data.data);
       } else {
-        notifyError("Failed to fetch complaints");
+        notify("Failed to fetch complaints", "error");
       }
     } catch (error) {
       console.error("Error fetching complaints", error);
-      notifyError("Failed to fetch complaints");
+      notify("Failed to fetch complaints", "error");
     }
   };
 
@@ -86,17 +71,17 @@ const AdminDashboard = () => {
         );
         setAvailablePersonnel(filtered);
       } else {
-        notifyError("Failed to fetch personnel");
+        notify("Failed to fetch personnel", "error");
       }
     } catch (error) {
       console.error("Error fetching personnel", error);
-      notifyError("Error fetching personnel");
+      notify("Error fetching personnel", "error");
     }
   };
 
   const handleAssign = async () => {
     if (!assignedName || !assignedContact) {
-      notifyError("Please fill in all fields");
+      notify("Please fill in all fields", "error");
       return;
     }
     try {
@@ -111,22 +96,22 @@ const AdminDashboard = () => {
 
       const data = await res.json();
       if (data.success) {
-        notifySuccess("Personnel assigned!");
+        notify("Personnel assigned!");
         fetchComplaints();
         setModalOpen(false);
       } else {
-        notifyError("Failed to assign");
+        notify("Failed to assign", "error");
       }
     } catch (error) {
       console.error("Error assigning personnel", error);
-      notifyError("Error assigning personnel");
+      notify("Error assigning personnel", "error");
     }
   };
 
   const handleAddPersonnel = async () => {
     const { name, contact, role } = newPersonnel;
     if (!name || !contact || !role) {
-      notifyError("All fields are required");
+      notify("All fields are required", "error");
       return;
     }
   
@@ -139,161 +124,231 @@ const AdminDashboard = () => {
   
       const data = await res.json();
       if (data.success) {
-        notifySuccess("Personnel added successfully");
+        notify("Personnel added successfully");
         setAddPersonnelModal(false);
         setNewPersonnel({ name: "", contact: "", role: "" });
       } else {
-        notifyError(data.message || "Failed to add personnel");
+        notify(data.message || "Failed to add personnel", "error");
       }
     } catch (error) {
       console.error("Error adding personnel", error);
-      notifyError("Something went wrong while adding personnel");
+      notify("Something went wrong while adding personnel", "error");
     }
   };
+
+  // Filter complaints based on status filter
+  const filteredComplaints = complaints.filter(c => 
+    filterStatus === "Active" ? c.status !== "Resolved" : c.status === "Resolved"
+  );
   
   return (
-    <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
-    <div className="min-h-screen w-full overflow-x-hidden  p-8">
-      <div className="flex items-center mb-10 w-full">
-        <h2 className="text-4xl font-extrabold text-indigo-400">Admin Dashboard</h2>
-      </div>
-      <div className="flex justify-end mb-4">
-        <button
-            onClick={() => setAddPersonnelModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 px-3 ml-auto rounded-lg transition"
-          >
-            + Add Personnel
-          </button>
-      </div>
+    <main className="bg-gray-900 min-h-screen text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header with gradient */}
+        <div className="bg-gradient-to-r from-indigo-800 to-purple-800 rounded-2xl p-6 mb-8 shadow-lg">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setAddPersonnelModal(true)}
+                className="bg-white text-indigo-800 hover:bg-indigo-100 font-medium py-2 px-4 rounded-lg transition flex items-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM16 8a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V8z" />
+                </svg>
+                Add Personnel
+              </button>
+            </div>
+          </div>
+          
+          {/* Status filter tabs */}
+          <div className="mt-6 border-b border-indigo-700">
+            <div className="flex">
+              <button
+                onClick={() => setFilterStatus("Active")}
+                className={`px-4 py-2 font-medium transition-colors ${
+                  filterStatus === "Active" 
+                    ? "border-b-2 border-white text-white" 
+                    : "text-indigo-200 hover:text-white"
+                }`}
+              >
+                Active Complaints
+              </button>
+              <button
+                onClick={() => setFilterStatus("Resolved")}
+                className={`px-4 py-2 font-medium transition-colors ${
+                  filterStatus === "Resolved" 
+                    ? "border-b-2 border-white text-white" 
+                    : "text-indigo-200 hover:text-white"
+                }`}
+              >
+                Resolved
+              </button>
+            </div>
+          </div>
+        </div>
 
-      {complaints.filter(c => c.status !== "Resolved").length === 0 ? (
-        <p className="text-center text-gray-300">No complaints found.</p>
-      ) : (
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {complaints
-            .filter((complaint) => complaint.status !== "Resolved").map((complaint) => (
+        {/* Complaints list */}
+        {filteredComplaints.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 bg-gray-800 rounded-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-500 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <p className="text-lg text-gray-400">No {filterStatus.toLowerCase()} complaints found.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredComplaints.map((complaint) => (
               <div
                 key={complaint.id}
-                className={`relative min-h-[320px] shadow-md rounded-2xl p-6 border hover:shadow-lg transition
-                  ${
-                    complaint.assigned_personnel_id || complaint.status === "Assigned"
-                      ? "border-green-800 border-4"
-                      : "bg-gray-800 border-red-700 border-3"
-                  }`}
+                className={`bg-gray-800 rounded-xl overflow-hidden shadow-lg transition hover:shadow-indigo-500/10 hover:translate-y-[-2px] ${
+                  complaint.assigned_personnel_id 
+                    ? "border-l-4 border-green-500" 
+                    : "border-l-4 border-yellow-500"
+                }`}
               >
-                <h3 className="text-xl font-semibold text-indigo-400 mb-2 flex items-center justify-between">
-                  <span>{complaint.complaint_type}</span>
+                {/* Card header */}
+                <div className="bg-gray-750 px-4 py-3 flex justify-between items-center">
+                  <div className="flex items-center">
+                    <span className="font-medium text-lg text-white">{complaint.complaint_type}</span>
+                    <span
+                      className={`ml-2 text-xs font-medium px-2 py-1 rounded-full ${
+                        complaint.priority === "High"
+                          ? "bg-red-500/20 text-red-400"
+                          : complaint.priority === "Medium"
+                          ? "bg-yellow-500/20 text-yellow-400"
+                          : "bg-green-500/20 text-green-400"
+                      }`}
+                    >
+                      {complaint.priority}
+                    </span>
+                  </div>
                   <span
-                    className={`ml-2 text-sm font-medium px-2 py-1 rounded-full ${
-                      complaint.priority === "High"
-                        ? "bg-red-500/20 text-red-400"
-                        : complaint.priority === "Medium"
-                        ? "bg-yellow-500/20 text-yellow-400"
-                        : "bg-green-500/20 text-green-400"
+                    className={`text-xs px-2 py-1 rounded-full ${
+                      complaint.status === "Assigned"
+                        ? "bg-green-600/20 text-green-400"
+                        : filterStatus === "Resolved"
+                        ? "bg-blue-600/20 text-blue-400"
+                        : "bg-yellow-600/20 text-yellow-400"
                     }`}
                   >
-                    {complaint.priority}
+                    {complaint.status}
                   </span>
-                </h3>
-                <div className="text-sm text-gray-300 space-y-4 mb-4">
-                  <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
-                    <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
-                      <i className="fas fa-user"></i> User Info
-                    </h4>
-                    <p><span className="font-medium text-gray-200">Name:</span> {complaint.name}</p>
-                    <p><span className="font-medium text-gray-200">Email:</span> {complaint.email}</p>
-                    <p><span className="font-medium text-gray-200">Location:</span> {complaint.location}</p>
+                </div>
+                
+                {/* Card body */}
+                <div className="p-4 space-y-3">
+                  {/* User info section */}
+                  <div className="flex items-start space-x-3">
+                    <div className="p-2 bg-indigo-500/10 rounded-lg">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm font-medium text-indigo-400">User Details</h3>
+                      <p className="text-sm text-gray-300 mt-1">{complaint.name}</p>
+                      <p className="text-sm text-gray-400">{complaint.email}</p>
+                      <p className="text-sm text-gray-400">{complaint.location}</p>
+                    </div>
                   </div>
-                    <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
-                      <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
-                        <i className="fas fa-exclamation-circle"></i> Message
-                      </h4>
-                      <p><span className="font-medium text-gray-200">Message:</span> {complaint.message}</p>
+                  
+                  {/* Message section */}
+                  <div className="flex items-start space-x-3">
+                    <div className="p-2 bg-indigo-500/10 rounded-lg">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-sm font-medium text-indigo-400">Message</h3>
+                      <p className="text-sm text-gray-300 mt-1">{complaint.message}</p>
                       {complaint.attachments && (
-                        <p>
-                          <span className="font-medium text-gray-200">Attachment:</span>{" "}
-                          <a
-                            href={`http://localhost:5000/uploads/${complaint.attachments}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-indigo-400 underline hover:text-indigo-300 transition"
-                          >
-                            View
-                          </a>
-                        </p>
+                        <a
+                          href={`http://localhost:5000/uploads/${complaint.attachments}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs flex items-center text-indigo-400 hover:text-indigo-300 mt-1"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clipRule="evenodd" />
+                          </svg>
+                          View Attachment
+                        </a>
                       )}
                     </div>
-                    <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
-                      <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
-                        <i className="fas fa-user-check"></i> Assigned Personnel
-                      </h4>
-                      <p><span className="font-medium text-gray-200">Name:</span> {complaint.assigned_name ?? "N/A"}</p>
-                      <p><span className="font-medium text-gray-200">Contact:</span> {complaint.assigned_contact ?? "N/A"}</p>
+                  </div>
+                  
+                  {/* Personnel section */}
+                  <div className="flex items-start space-x-3">
+                    <div className="p-2 bg-indigo-500/10 rounded-lg">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                      </svg>
                     </div>
-                    <div className="space-y-1 bg-gray-700/50 p-4 rounded-xl shadow-sm">
-                      <h4 className="text-indigo-300 text-base font-semibold mb-1 flex items-center gap-2">
-                        <i className="fas fa-clock"></i> Meta Info
-                      </h4>
-                      <p>
-                        <span className="font-medium text-gray-200">Created At:</span>{" "}
-                        {new Date(complaint.createdAt).toLocaleString()}
-                      </p>
-                      <p>
-                        <span className="font-medium text-gray-200">Status:</span>
-                        <span
-                          className={`ml-2 inline-block px-2 py-1 rounded-full text-xs font-semibold ${
-                            complaint.status === "Assigned"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-yellow-100 text-yellow-800"
-                          }`}
-                        >
-                          {complaint.status}
-                        </span>
-                      </p>
+                    <div className="flex-1">
+                      <h3 className="text-sm font-medium text-indigo-400">Assigned Personnel</h3>
+                      {complaint.assigned_name ? (
+                        <>
+                          <p className="text-sm text-gray-300 mt-1">{complaint.assigned_name}</p>
+                          <p className="text-sm text-gray-400">{complaint.assigned_contact}</p>
+                        </>
+                      ) : (
+                        <p className="text-sm text-gray-400 mt-1">Not assigned yet</p>
+                      )}
                     </div>
                   </div>
-
-
-                {complaint.assigned_personnel_id ? (
-                  <button
-                    onClick={() => resolve(complaint.id)}
-                    className="cursor-pointer text-green-400 w-full mt-4 bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-xl transition"
-                  >
-                    Resolve
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => openAssignModal(complaint.id, complaint.complaint_type)}
-                    className="cursor-pointer w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-xl transition"
-                  >
-                    Assign Personnel
-                  </button>
-                )}
+                  
+                  {/* Date section condensed */}
+                  <div className="text-xs text-gray-400 pt-2 border-t border-gray-700">
+                    Created: {new Date(complaint.createdAt).toLocaleString()}
+                  </div>
+                </div>
+                
+                {/* Card footer */}
+                <div className="px-4 py-3 bg-gray-750">
+                  {filterStatus !== "Resolved" && (
+                    complaint.assigned_personnel_id ? (
+                      <button
+                        onClick={() => resolve(complaint.id)}
+                        className="w-full flex justify-center items-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                        Mark as Resolved
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => openAssignModal(complaint.id, complaint.complaint_type)}
+                        className="w-full flex justify-center items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                          <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                        </svg>
+                        Assign Personnel
+                      </button>
+                    )
+                  )}
+                </div>
               </div>
             ))}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
 
+      {/* Assign Personnel Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-gray-800 p-8 rounded-2xl border border-gray-700 w-full max-w-md shadow-xl">
-            <button
-              onClick={() => setModalOpen(false)}
-              className="cursor-pointer absolute top-2 left-2 text-gray-400 hover:text-red-500 text-xl font-bold"
-              title="Close Modal"
-            >
-              ×
-            </button>
-
-            <h3 className="cursor-pointer text-xl font-bold text-indigo-400 mb-4 text-center">
-              Assign Personnel
-            </h3>
-
-            <div>
-              <label className="text-gray-300 text-sm font-medium block mb-1">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-xl w-full max-w-md overflow-hidden shadow-2xl transform transition-all">
+            <div className="px-6 py-4 bg-indigo-600">
+              <h3 className="text-lg font-medium text-white">Assign Personnel</h3>
+            </div>
+            
+            <div className="p-6">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
                 Select Personnel
               </label>
-
               <select
                 value={assignedName ? availablePersonnel.find(p => p.name === assignedName)?.id || "" : ""}
                 onChange={(e) => {
@@ -303,87 +358,111 @@ const AdminDashboard = () => {
                     setAssignedContact(selected.contact);
                   }
                 }}
-                className="w-full px-4 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-2 focus:ring-indigo-500 outline-none"
               >
-                <option value="">-- Select --</option>
+                <option value="">-- Select Personnel --</option>
                 {availablePersonnel.map(p => (
                   <option key={p.id} value={p.id}>
                     {p.name} ({p.contact}) - {p.role}
                   </option>
                 ))}
               </select>
-              <button
-                onClick={handleAssign}
-                className="cursor-pointer mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition"
-              >
-                Assign
-              </button>
-
+              
               {availablePersonnel.length === 0 && (
-                <p className="text-sm text-red-400 mt-2">
-                  No available personnel match this complaint type.
-                </p>
+                <div className="mt-2 p-3 bg-red-900/20 text-red-400 text-sm rounded-lg flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  No available personnel match this complaint type
+                </div>
               )}
+
+              <div className="mt-6 flex space-x-3">
+                <button
+                  onClick={() => setModalOpen(false)}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAssign}
+                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                  disabled={!assignedName}
+                >
+                  Assign
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
+      {/* Add Personnel Modal */}
       {addPersonnelModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="relative bg-gray-800 p-8 rounded-2xl border border-gray-700 w-full max-w-md shadow-xl">
-            <button
-              onClick={() => setAddPersonnelModal(false)}
-              className="cursor-pointer absolute top-2 left-2 text-gray-400 hover:text-red-500 text-xl font-bold"
-              title="Close Modal"
-            >
-              ×
-            </button>
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-gray-800 rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div className="px-6 py-4 bg-indigo-600">
+              <h3 className="text-lg font-medium text-white">Add New Personnel</h3>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Name</label>
+                <input
+                  type="text"
+                  placeholder="Full Name"
+                  value={newPersonnel.name}
+                  onChange={(e) => setNewPersonnel({ ...newPersonnel, name: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Contact</label>
+                <input
+                  type="text"
+                  placeholder="Phone or Email"
+                  value={newPersonnel.contact}
+                  onChange={(e) => setNewPersonnel({ ...newPersonnel, contact: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Role</label>
+                <select
+                  value={newPersonnel.role}
+                  onChange={(e) => setNewPersonnel({ ...newPersonnel, role: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="">Select Role</option>
+                  <option value="Network">Network</option>
+                  <option value="Cleaning">Cleaning</option>
+                  <option value="Carpentry">Carpentry</option>
+                  <option value="PC Maintenance">PC Maintenance</option>
+                  <option value="Plumbing">Plumbing</option>
+                  <option value="Electricity">Electricity</option>
+                </select>
+              </div>
 
-            <h3 className="text-xl cursor pointer font-bold text-indigo-400 mb-4 text-center">Add Personnel</h3>
-
-            <div className="space-y-4">
-              <input
-                type="text"
-                placeholder="Name"
-                value={newPersonnel.name}
-                onChange={(e) => setNewPersonnel({ ...newPersonnel, name: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white outline-none"
-              />
-              <input
-                type="text"
-                placeholder="Contact"
-                value={newPersonnel.contact}
-                onChange={(e) => setNewPersonnel({ ...newPersonnel, contact: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white outline-none"
-              />
-              <select
-                value={newPersonnel.role}
-                onChange={(e) => setNewPersonnel({ ...newPersonnel, role: e.target.value })}
-                className="w-full px-4 py-2 rounded-lg bg-gray-900 border border-gray-600 text-white outline-none"
-              >
-                <option value="">Select Role</option>
-                <option value="Network">Network</option>
-                <option value="Cleaning">Cleaning</option>
-                <option value="Carpentry">Carpentry</option>
-                <option value="PC Maintenance">PC Maintenance</option>
-                <option value="Plumbing">Plumbing</option>
-                <option value="Electricity">Electricity</option>
-              </select>
-
-
-              <button
-                onClick={handleAddPersonnel}
-                className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition"
-              >
-                Add Personnel
-              </button>
+              <div className="mt-6 flex space-x-3">
+                <button
+                  onClick={() => setAddPersonnelModal(false)}
+                  className="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddPersonnel}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition"
+                >
+                  Add Personnel
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
-
-    </div>
     </main>
   );
 };
