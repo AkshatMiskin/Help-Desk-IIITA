@@ -18,7 +18,8 @@ const CategorySelection = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-4">
+    <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
+    <div className="flex flex-col items-center justify-center px-4 py-24">
       <FloatingIcons />
       <h2 className="text-2xl sm:text-3xl font-semibold text-indigo-400 mb-6">
         What can we help you with?
@@ -36,6 +37,7 @@ const CategorySelection = () => {
         ))}
       </div>
     </div>
+    </main>
   );
 };
 

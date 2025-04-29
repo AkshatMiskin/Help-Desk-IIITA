@@ -42,6 +42,7 @@ const ResetPassword = () => {
   };
 
   return (
+    <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
       <div className="w-full max-w-xl bg-gray-800 p-8 rounded-3xl shadow-2xl border border-gray-700">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-extrabold text-indigo-400">Reset Password</h1>
@@ -99,6 +100,7 @@ const ResetPassword = () => {
           Only authorized IIITA users allowed
         </p>
       </div>
+    </main>
   );
 };
 

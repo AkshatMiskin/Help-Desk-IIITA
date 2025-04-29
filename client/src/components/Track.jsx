@@ -42,6 +42,7 @@ function Track() {
   };
 
   return (
+    <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-24"> 
     <div className="max-w-xl mx-auto p-8 bg-gray-800 rounded-2xl shadow-lg mt-10">
       <h2 className="text-3xl font-bold text-center text-white mb-6">Track Your Ticket</h2>
       <div className="space-y-4">
@@ -83,6 +84,7 @@ function Track() {
         )}
       </div>
     </div>
+    </main>
   );
 }
 

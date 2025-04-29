@@ -152,6 +152,7 @@ const AdminDashboard = () => {
   };
   
   return (
+    <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
     <div className="min-h-screen w-full overflow-x-hidden  p-8">
       <div className="flex items-center mb-10 w-full">
         <h2 className="text-4xl font-extrabold text-indigo-400">Admin Dashboard</h2>
@@ -383,6 +384,7 @@ const AdminDashboard = () => {
       )}
 
     </div>
+    </main>
   );
 };
 
