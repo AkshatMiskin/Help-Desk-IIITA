@@ -6,7 +6,10 @@ const {
   insertFeedback,
   markFeedbackGiven
 } = require('../models/userModel');
+const db = require('../config/db');
 
+const crypto = require("crypto");
+const {sendForgotPasswordMail} = require("../utils/mailer");
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 const bcrypt = require('bcrypt');
@@ -183,10 +186,65 @@ const feedback = (req, res) => {
   });
 };
 
+const resetTokens = {}; // Store tokens in memory
+
+const ForgotPassword = (req, res) => {
+  const {email} = req.body;
+  const query = `SELECT name FROM users WHERE email = ?`;
+
+  db.query(query, [email], (err, result) => {
+    if (err) return res.status(500).send("Database error");
+    if (result.length === 0) return res.status(404).send("User not found");
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const expiresAt = Date.now() + 1000 * 60 * 60; // 1 hour validity
+
+    resetTokens[token] = { email, expiresAt };
+
+    const resetLink = `http://localhost:5173/reset-password/${token}`;
+    console.log(resetLink);
+
+    sendForgotPasswordMail(email, result[0].name, resetLink)
+      .then(res.json({
+        success: true
+      }))
+      .catch((mailErr) => {
+        console.error("Mail error:", mailErr);
+        res.status(500).send("Error sending reset email.");
+      });
+  });
+};
+
+
+const ResetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const entry = resetTokens[token];
+
+  if (!entry || entry.expiresAt < Date.now()) {
+    return res.status(400).send("Invalid or expired token.");
+  }
+
+  const email = entry.email;
+
+  const updateQuery = `UPDATE users SET password = ? WHERE email = ?`;
+  db.query(updateQuery, [hashedPassword, email], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Database error while resetting password." });
+    }
+
+    delete resetTokens[token]; // Invalidate the token after use
+    res.send("Password has been reset successfully. You can now log in.");
+  });
+};
 
 module.exports = { 
   login, 
   signup, 
   userDetails, 
-  feedback 
+  feedback,
+  ForgotPassword,
+  ResetPassword,
 };

@@ -141,9 +141,33 @@ const complaintResolvedMail = (email, name, type) => {
   });
 };
 
+const generateForgotPasswordHTML = (name, resetLink) => {
+  return `
+    <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+      <h2>Hello ${name},</h2>
+      <p>You requested a password reset for your IIITA Help Desk account.</p>
+      <p>Please click the button below to reset your password:</p>
+      <a href="${resetLink}" style="display:inline-block;padding:10px 20px;background-color:#4F46E5;color:white;text-decoration:none;border-radius:5px;">Reset Password</a>
+      <p>If you did not request this, please ignore this email.</p>
+      <br/>
+      <p style="font-size: 0.9rem; color: gray;">Regards,<br>IIITA Help Desk Team</p>
+    </div>
+  `;
+}
+const sendForgotPasswordMail = (email, name, resetLink) => {
+  const htmlContent = generateForgotPasswordHTML(name, resetLink);
+  console.log(email, name, resetLink);
+  return sendMail({
+    to: email,
+    subject: "IIITA Help Desk - Password Reset",
+    html: htmlContent,
+  });
+};
+
 module.exports = { 
   sendMail, 
   sendTicketSubmissionMail, 
   adminAssignedPersonnelMail, 
   complaintResolvedMail,
+  sendForgotPasswordMail
 };
