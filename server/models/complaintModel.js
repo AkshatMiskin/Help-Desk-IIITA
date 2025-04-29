@@ -1,7 +1,11 @@
 const db = require("../config/db");
 require("dotenv").config();
 const generateCode = () => Math.floor(1000 + Math.random() * 9000);
-const { sendTicketSubmissionMail, adminAssignedPersonnelMail, complaintResolvedMail } = require("../utils/mailer");
+const { 
+  sendTicketSubmissionMail, 
+  adminAssignedPersonnelMail, 
+  complaintResolvedMail 
+} = require("../utils/mailer");
 
 const getAll = (callback) => {
   const sql = `
@@ -55,7 +59,19 @@ const getUserComplaint = (email, callback) => {
       return callback(new Error("User not found"), null);
     }
     const user_id = userResults[0].id; 
-    db.query("SELECT * FROM complaints WHERE user_id = ?", [user_id], callback);
+    const q = `
+      SELECT 
+        c.*, 
+        ct.type_name AS type, 
+        f.rating AS feedback, 
+        p.name AS assigned_personnel_name
+      FROM complaints c
+      LEFT JOIN complaint_types ct ON c.complaint_type_id = ct.id
+      LEFT JOIN feedback f ON f.complaint_id = c.id
+      LEFT JOIN personnel p ON c.assigned_personnel_id = p.id
+      WHERE c.user_id = ?
+    `;
+    db.query(q, [user_id], callback);
   });
 };
 

@@ -67,7 +67,9 @@ const UserDashboard = () => {
           `http://localhost:5000/api/complaints/user/${decoded.email}`
         );
         const data = await res.json();
-
+        console.log(data); // i need type, feedback, assigned_personnel_name
+        // type i can get from complaint_type_id, feedback i can get from id(complaint id)
+        // assigned_personnel_name from assigned_personnel_id
         if (data.success && Array.isArray(data.complaints)) {
           setComplaints(data.complaints);
         }
@@ -102,11 +104,30 @@ const UserDashboard = () => {
                   : "bg-red-100 border-red-400"
               }`}
             >
-              <h3 className="text-xl font-semibold text-indigo-700 mb-2">
-                {complaint.type}
-              </h3>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xl font-semibold text-indigo-700">
+                  {complaint.type}
+                </h3>
 
-              <div className="text-sm text-gray-800 space-y-1 mb-4">
+                {complaint.feedback_given && (
+                  <div className="flex items-center space-x-1">
+                    {[...Array(5)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className={`w-5 h-6 ${i < complaint.feedback ? 'text-yellow-400' : 'text-gray-300'}`}
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.09 3.355h3.52c.969 0 1.371 1.24.588 1.81l-2.857 2.074 1.09 3.355c.3.921-.755 1.688-1.54 1.118L10 12.347l-2.857 2.074c-.784.57-1.838-.197-1.539-1.118l1.09-3.355-2.857-2.074c-.784-.57-.38-1.81.588-1.81h3.52l1.09-3.355z" />
+                      </svg>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              
+
+              <div className="text-sm text-gray-800 space-y-1">
                 <p>
                   <span className="font-medium">Location:</span>{" "}
                   {complaint.location}
@@ -116,17 +137,14 @@ const UserDashboard = () => {
                   {complaint.priority}
                 </p>
                 <p>
-                  <span className="font-medium">Assigned Personnel ID:</span>{" "}
-                  {complaint.assigned_personnel_id ?? "N/A"}
+                  <span className="font-medium">Assigned Personnel:</span>{" "}
+                  {complaint.assigned_personnel_name ?? "N/A"}
                 </p>
                 <p>
                   <span className="font-medium">Created At:</span>{" "}
                   {new Date(complaint.createdAt).toLocaleString()}
                 </p>
-                <p>
-                  <span className="font-medium">Message:</span>{" "}
-                  {complaint.message}
-                </p>
+                
 
                 {complaint.attachments && (
                   <p>
@@ -145,7 +163,7 @@ const UserDashboard = () => {
 
               <div className="absolute bottom-4 left-6 right-6 flex flex-col gap-2">
                 <div
-                  className={`text-center font-semibold py-2 rounded-xl text-lg ${
+                  className={`text-center font-semibold py-1 rounded-xl text-lg ${
                     complaint.status === "Resolved" ? "text-green-600" : "text-red-600"
                   }`}
                 >
