@@ -5,6 +5,7 @@ import iiitaImage from "../assets/img/iiita.jpeg";
 import { jwtDecode } from "jwt-decode";
 import FloatingIcons from "./ui/FloatingIcons";
 import FeatureCard from "./ui/FeatureCard";
+import Button from "./ui/Button";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -51,21 +52,20 @@ const LandingPage = () => {
                   : "A unified platform for students and staff to raise, manage, and track complaints across hostels, departments, and facilities at IIITA."}
               </p>
               <div className="flex flex-wrap gap-4">
-                <button
-                  onClick={() => handleNavigate("/select-category")}
-                  className="cursor-pointer inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3 rounded-lg font-medium transition shadow-lg hover:shadow-indigo-500/30"
-                >
-                  <Send className="w-5 h-5" />
-                  Submit a Ticket
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => handleNavigate("/track")}
-                  className="cursor-pointer inline-flex items-center gap-2 bg-gray-800/70 hover:bg-gray-700/70 backdrop-blur text-white border border-gray-700 px-6 py-3 rounded-lg font-medium transition"
-                >
-                  <Ticket className="w-5 h-5" />
-                  View Existing Tickets
-                </button>
+              <Button
+                onClick={() => handleNavigate("/select-category")}
+                icon={Send}
+                variant="primary"
+              >
+                Submit a Ticket
+              </Button>
+              <Button
+                onClick={() => handleNavigate("/track")}
+                icon={Ticket}
+                variant="secondary"
+              >
+                View Existing Tickets
+              </Button>
               </div>
             </div>
             <div className="z-10 md:w-5/12">
@@ -126,20 +126,20 @@ const LandingPage = () => {
               </p>
             </div>
             <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => handleNavigate("/select-category")}
-                className="cursor-pointer inline-flex items-center gap-2 bg-white text-indigo-900 hover:bg-indigo-100 px-6 py-3 rounded-lg font-medium transition shadow-lg"
-              >
-                <Send className="w-5 h-5" />
-                Submit Now
-              </button>
-              <button
-                onClick={() => handleNavigate("/track")}
-                className="cursor-pointer inline-flex items-center gap-2 bg-transparent hover:bg-white/10 border border-white/30 text-white px-6 py-3 rounded-lg font-medium transition"
-              >
-                <Ticket className="w-5 h-5" />
-                Track Tickets
-              </button>
+            <Button
+              onClick={() => handleNavigate("/select-category")}
+              icon={Send}
+              variant="white"
+            >
+              Submit Now
+            </Button>
+            <Button
+              onClick={() => handleNavigate("/track")}
+              icon={Ticket}
+              variant="outline"
+            >
+              Track Tickets
+            </Button>
             </div>
           </div>
         </div>

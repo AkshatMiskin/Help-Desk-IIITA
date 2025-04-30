@@ -9,6 +9,7 @@ import Chat from "../assets/Chat";
 import Microphone from "../assets/Microphone";
 import Group from "../assets/Group";
 import Success from "../assets/Success";
+import Button from "./ui/Button";
 
 const AdminDashboard = () => {
   const [complaints, setComplaints] = useState([]);
@@ -157,13 +158,12 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setAddPersonnelModal(true)}
-                className="bg-white text-indigo-800 hover:bg-indigo-100 font-medium py-2 px-4 rounded-lg transition flex items-center"
-              >
-                <AddUser />
-                Add Personnel
-              </button>
+            <Button
+              onClick={() => setAddPersonnelModal(true)}
+            >
+              <AddUser className="mr-2" />
+              Add Personnel
+            </Button>
             </div>
           </div>
           
