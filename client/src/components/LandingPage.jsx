@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Send, Ticket, ShieldCheck, Clock, MessagesSquare, ChevronRight } from "lucide-react";
-import iiitaImage from "../assets/iiita.jpeg";
+import iiitaImage from "../assets/img/iiita.jpeg";
 import { jwtDecode } from "jwt-decode";
 import FloatingIcons from "./ui/FloatingIcons";
 import FeatureCard from "./ui/FeatureCard";
