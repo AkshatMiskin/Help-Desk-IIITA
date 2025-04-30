@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Building2, ArrowLeft, LogOut, User, Menu, X } from "lucide-react";
+import { 
+  Building2, 
+  ArrowLeft, 
+  LogOut, 
+  User, 
+  Menu, 
+  X } from "lucide-react";
 import { jwtDecode } from "jwt-decode";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
