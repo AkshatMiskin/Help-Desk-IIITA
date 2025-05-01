@@ -13,8 +13,8 @@ import {
   User, 
   Calendar, 
   ExternalLink } from "lucide-react";
-import Close from "../assets/Close";
-import Search from "../assets/Search";
+import Close from "../../assets/Icons/Close";
+import Search from "../../assets/Icons/Search";
 
 const UserDashboard = () => {
   const [complaints, setComplaints] = useState([]);

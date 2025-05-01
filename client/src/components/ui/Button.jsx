@@ -16,7 +16,7 @@ const Button = ({ onClick, icon: Icon, children, variant = "primary" }) => {
   };
 
   return (
-    <button onClick={onClick} className={`${baseStyles} ${variants[variant]}`}>
+    <button onClick={onClick} className={`${baseStyles} ${variants[variant]} cursor-pointer`}>
       {Icon && <Icon className="w-5 h-5" />}
       {children}
     </button>

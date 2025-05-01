@@ -3,18 +3,18 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; 
-import QuestionMark from "../assets/QuestionMark";
-import Tag from "../assets/Tag";
-import AdjustmentVertical from "../assets/AdjustmentVertical";
-import ChevronDown from "../assets/ChevronDown";
-import Location from "../assets/Location"
-import Message from "../assets/Message";
-import Support from "../assets/Support";
-import Upload from "../assets/Upload";
-import Close from "../assets/Close"
-import Tick from "../assets/Tick";
-import Spinner from "../assets/Spinner";
-import Minus from "../assets/Minus"
+import QuestionMark from "../../assets/Icons/QuestionMark";
+import Tag from "../../assets/Icons/Tag";
+import AdjustmentVertical from "../../assets/Icons/AdjustmentVertical";
+import ChevronDown from "../../assets/Icons/ChevronDown";
+import Location from "../../assets/Icons/Location"
+import Message from "../../assets/Icons/Message";
+import Support from "../../assets/Icons/Support";
+import Upload from "../../assets/Icons/Upload";
+import Close from "../../assets/Icons/Close"
+import Tick from "../../assets/Icons/Tick";
+import Spinner from "../../assets/Icons/Spinner";
+import Minus from "../../assets/Icons/Minus"
 const TicketForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileName, setFileName] = useState("");

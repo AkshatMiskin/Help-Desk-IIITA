@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import FloatingIcons from "./ui/FloatingIcons";
+import FloatingIcons from "../ui/FloatingIcons";
 
 const LoginForm = ({ onLogin }) => {
   const [email, setEmail] = useState("");

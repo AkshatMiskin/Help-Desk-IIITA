@@ -7,18 +7,18 @@ import {
 } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer } from "react-toastify";
-import LandingPage from "./components/LandingPage";
-import LoginForm from "./components/LoginForm";
-import SignupForm from "./components/SignupForm";
-import ComplaintForm from "./components/ComplaintForm";
-import AdminDashboard from "./components/AdminDashboard";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Track from "./components/Track";
-import UserDashboard from "./components/UserDashboard";
-import CategorySelection from "./components/CategorySelection";
-import ForgotPassword from "./components/ForgotPassword";
-import ResetPassword from "./components/ResetPassword";
+import LandingPage from "./components/pages/LandingPage";
+import LoginForm from "./components/pages/LoginForm";
+import SignupForm from "./components/pages/SignupForm";
+import ComplaintForm from "./components/pages/ComplaintForm";
+import AdminDashboard from "./components/pages/AdminDashboard";
+import Header from "./components/pages/Header";
+import Footer from "./components/pages/Footer";
+import Track from "./components/pages/Track";
+import UserDashboard from "./components/pages/UserDashboard";
+import CategorySelection from "./components/pages/CategorySelection";
+import ForgotPassword from "./components/pages/ForgotPassword";
+import ResetPassword from "./components/pages/ResetPassword";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

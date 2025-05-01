@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ExclamationMark from "../assets/ExclamationMark";
-import AddUser from "../assets/AddUser";
-import Person from "../assets/Person";
-import Document from "../assets/Document";
-import Chat from "../assets/Chat";
-import Microphone from "../assets/Microphone";
-import Group from "../assets/Group";
-import Success from "../assets/Success";
-import Button from "./ui/Button";
+import ExclamationMark from "../../assets/Icons/ExclamationMark";
+import AddUser from "../../assets/Icons/AddUser";
+import Person from "../../assets/Icons/Person";
+import Document from "../../assets/Icons/Document";
+import Chat from "../../assets/Icons/Chat";
+import Microphone from "../../assets/Icons/Microphone";
+import Group from "../../assets/Icons/Group";
+import Success from "../../assets/Icons/Success";
+import Button from "../ui/Button";
 
 const AdminDashboard = () => {
   const [complaints, setComplaints] = useState([]);
