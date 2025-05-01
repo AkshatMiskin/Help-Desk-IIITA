@@ -35,7 +35,6 @@ const login = (req, res) => {
 
     const user = results[0];
 
-    // Compare hashed password
     bcrypt.compare(password, user.password, (compareErr, isMatch) => {
       if (compareErr || !isMatch) {
         return res.status(401).json({ 
