@@ -13,6 +13,8 @@ const {sendForgotPasswordMail} = require("../utils/mailer");
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
 const bcrypt = require('bcrypt');
+const { userSchema } = require('../schemas/userSchema');
+const { feedbackSchema } = require('../schemas/feedbackSchema');
 const SECRET_KEY = process.env.SECRET_KEY; 
 
 const login = (req, res) => {
@@ -61,7 +63,15 @@ const login = (req, res) => {
 };
 
 const signup = async (req, res) => {
-  const { name, email, password } = req.body;
+  const parseResult = userSchema.safeParse(req.body);
+  if (!parseResult.success) {
+    return res.status(400).json({
+      success: false,
+      message: "Validation error.",
+      errors: parseResult.error.errors,
+    });
+  }
+  const { name, email, password } = parseResult.data; 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -133,14 +143,18 @@ const userDetails = (req, res) => {
 };
 
 const feedback = (req, res) => {
-  const { complaint_id, user_id, assigned_personnel_id, rating, comment } = req.body;
+  const parseResult = feedbackSchema.safeParse(req.body);
 
-  if (!complaint_id || !user_id || !assigned_personnel_id || !rating) {
+  if (!parseResult.success) {
     return res.status(400).json({
       success: false,
-      message: "Missing required fields.",
+      message: "Validation error.",
+      errors: parseResult.error.errors,
     });
   }
+
+  const { complaint_id, user_id, assigned_personnel_id, rating, comment } = parseResult.data;
+
 
   checkExistingFeedback(complaint_id, (err, existing) => {
     if (err) {
