@@ -1,7 +1,6 @@
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 dotenv.config();
-
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -11,7 +10,7 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
   if (err) throw err;
-  console.log("✅ MySQL Connected!");
+  console.log("MySQL Connected!");
 });
 const createUsersTable = `
   CREATE TABLE IF NOT EXISTS users (
@@ -86,10 +85,10 @@ const queries = [
   createFeedbackTable,
 ];
 
-queries.forEach((query) => {
+queries.forEach((query, id) => {
   db.query(query, (err, result) => {
     if (err) throw err;
-    console.log(`✅ Table ensured to exist!`);
+    console.log(`Table ${id} ensured to exist!`);
   });
 });
 module.exports = db;

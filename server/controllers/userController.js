@@ -228,7 +228,6 @@ const ForgotPassword = (req, res) => {
   });
 };
 
-
 const ResetPassword = async (req, res) => {
   const { token } = req.params;
   const { password } = req.body;

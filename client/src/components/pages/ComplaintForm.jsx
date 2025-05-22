@@ -65,7 +65,13 @@ const TicketForm = () => {
         const decoded = jwtDecode(token);
         const email = decoded.email;
 
-        const res = await fetch(`http://localhost:5000/api/users/${email}`);
+        const res = await fetch(`http://localhost:5000/api/users/${email}`,{
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
         const data = await res.json();
 
         if (data.success && data.user) {
@@ -106,7 +112,7 @@ const TicketForm = () => {
       const res = await fetch("http://localhost:5000/api/complaints", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`,
         },
         body: form,
       });
