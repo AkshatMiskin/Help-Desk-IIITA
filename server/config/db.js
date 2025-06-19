@@ -80,10 +80,10 @@ const createFeedbackTable = `
 );
 `;
 const queries = [
+  createComplaintTypesTable,
   createUsersTable,
   createPersonnelTable,
   createComplaintsTable,
-  createComplaintTypesTable,
   createFeedbackTable,
 ];
 
