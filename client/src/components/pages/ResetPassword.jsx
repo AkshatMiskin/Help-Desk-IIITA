@@ -1,3 +1,4 @@
+import "dotenv/config";
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -19,7 +20,7 @@ const ResetPassword = () => {
     }
     console.log(password);
     try {
-      const response = await fetch(`http://localhost:5000/api/reset-password/${token}`, {
+      const response = await fetch(`${process.env.BACKEND_URL}/api/reset-password/${token}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
