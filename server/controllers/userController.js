@@ -155,7 +155,6 @@ const feedback = (req, res) => {
 
   const { complaint_id, user_id, assigned_personnel_id, rating, comment } = parseResult.data;
 
-
   checkExistingFeedback(complaint_id, (err, existing) => {
     if (err) {
       console.error("Error checking existing feedback:", err);
