@@ -76,12 +76,10 @@ const AdminDashboard = () => {
     try {
       const res = await fetch(`${apiUrl}/api/personnel`);
       const data = await res.json();
-      console.log("Personnel: ", data);
       if (data.success) {
         const filtered = data.data.filter(
           (p) => p.available && p.role.toLowerCase() === complaintType.toLowerCase()
         );
-        console.log("Filtered Personnel:", filtered);
         setAvailablePersonnel(filtered);
       } else {
         notify("Failed to fetch personnel", "error");
@@ -153,7 +151,7 @@ const AdminDashboard = () => {
   const filteredComplaints = complaints.filter(c => 
     filterStatus === "Active" ? c.status !== "Resolved" : c.status === "Resolved"
   );
-  console.log("Filtered Complaints:", filteredComplaints);
+
   return (
     <main className="bg-gray-900 min-h-screen text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
