@@ -1,6 +1,6 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
-import {ExclamationMark, AddUser, Person, Document, Chat, Microphone, Group, Success, Button} from "../../assets/Icons";
+import {ExclamationMark, AddUser, Person, Document, Chat, Microphone, Group, Success} from "../../assets/Icons";
 import useNotify from "../../hooks/useNotify";
 
 const AdminDashboard = () => {
