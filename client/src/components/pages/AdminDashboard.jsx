@@ -74,6 +74,7 @@ const AdminDashboard = () => {
     setModalOpen(true);
 
     try {
+      console.log("Fetching personnel for complaint type:", complaintType);
       const res = await fetch(`${apiUrl}/api/personnel`);
       const data = await res.json();
       console.log("Personnel: ", data);
