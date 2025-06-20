@@ -1,4 +1,4 @@
-import "dotenv/config";
+const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,7 +26,7 @@ const LoginForm = ({ onLogin }) => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+      const res = await fetch(`${apiUrl}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

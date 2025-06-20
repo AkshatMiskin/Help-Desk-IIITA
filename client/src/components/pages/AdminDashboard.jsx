@@ -1,4 +1,4 @@
-import "dotenv/config";
+const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,7 +32,7 @@ const AdminDashboard = () => {
   const resolve = async (id) => {
     try {
       
-      const res = await fetch(`${process.env.BACKEND_URL}/api/complaints/${id}`, {
+      const res = await fetch(`${apiUrl}/api/complaints/${id}`, {
         method: "PATCH",
       });
       const data = await res.json();
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
   
   const fetchComplaints = async () => {
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/complaints`);
+      const res = await fetch(`${apiUrl}/api/complaints`);
       const data = await res.json();
       if (data.success) {
         setComplaints(data.data);
@@ -74,7 +74,7 @@ const AdminDashboard = () => {
     setModalOpen(true);
 
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/personnel`);
+      const res = await fetch(`${apiUrl}/api/personnel`);
       const data = await res.json();
       if (data.success) {
         const filtered = data.data.filter(
@@ -97,7 +97,7 @@ const AdminDashboard = () => {
     }
     try {
       const res = await fetch(
-        `${process.env.BACKEND_URL}/api/complaints/${selectedComplaintId}/assign`,
+        `${apiUrl}/api/complaints/${selectedComplaintId}/assign`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -127,7 +127,7 @@ const AdminDashboard = () => {
     }
   
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/personnel`, {
+      const res = await fetch(`${apiUrl}/api/personnel`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, contact, role }),
@@ -267,7 +267,7 @@ const AdminDashboard = () => {
                       <p className="text-sm text-gray-300 mt-1">{complaint.message}</p>
                       {complaint.attachments && (
                         <a
-                          href={`${process.env.BACKEND_URL}/uploads/${complaint.attachments}`}
+                          href={`${apiUrl}/uploads/${complaint.attachments}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-xs flex items-center text-indigo-400 hover:text-indigo-300 mt-1"

@@ -1,4 +1,4 @@
-import "dotenv/config";
+const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,7 +33,7 @@ const ForgotPassword = () => {
     setLoading(true);
     
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/forgot-password`, {
+      const res = await fetch(`${apiUrl}/api/forgot-password`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

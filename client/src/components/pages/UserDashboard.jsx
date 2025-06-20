@@ -1,4 +1,4 @@
-import "dotenv/config";
+const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
@@ -47,7 +47,7 @@ const UserDashboard = () => {
     };
 
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/feedback`, {
+      const res = await fetch(`${apiUrl}/api/feedback`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ const UserDashboard = () => {
       try {
         const decoded = jwtDecode(token);
         const res = await fetch(
-          `${process.env.BACKEND_URL}/api/complaints/user/${decoded.email}`
+          `${apiUrl}/api/complaints/user/${decoded.email}`
         );
         const data = await res.json();
         
@@ -312,7 +312,7 @@ const UserDashboard = () => {
                     <div className="flex items-start">
                       <File className="w-4 h-4 text-gray-400 mr-2 mt-0.5 shrink-0" />
                       <a
-                        href={`${process.env.BACKEND_URL}/uploads/${complaint.attachments}`}
+                        href={`${apiUrl}/uploads/${complaint.attachments}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-indigo-400 hover:text-indigo-300 flex items-center"

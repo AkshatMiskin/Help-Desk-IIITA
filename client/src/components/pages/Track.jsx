@@ -1,4 +1,4 @@
-import "dotenv/config";
+const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
 import React, { useState } from "react";
 
 function Track() {
@@ -18,7 +18,7 @@ function Track() {
     }
 
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/complaints/track`, {
+      const res = await fetch(`${apiUrl}/api/complaints/track`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

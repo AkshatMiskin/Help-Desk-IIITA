@@ -1,4 +1,5 @@
-import "dotenv/config";
+const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
+
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -42,7 +43,7 @@ const App = () => {
 
   const handleLogin = async (email, password) => {
     try {
-      const response = await fetch(`${process.env.BACKEND_URL}/api/login`, {
+      const response = await fetch(`${apiUrl}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

@@ -1,4 +1,4 @@
-import "dotenv/config";
+const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -66,7 +66,7 @@ const TicketForm = () => {
         const decoded = jwtDecode(token);
         const email = decoded.email;
 
-        const res = await fetch(`${process.env.BACKEND_URL}/api/users/${email}`,{
+        const res = await fetch(`${apiUrl}/api/users/${email}`,{
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const TicketForm = () => {
     }
   
     try {
-      const res = await fetch(`${process.env.BACKEND_URL}/api/complaints`, {
+      const res = await fetch(`${apiUrl}/api/complaints`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${token}`,
