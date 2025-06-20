@@ -1,5 +1,4 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
-console.log(apiUrl);
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
