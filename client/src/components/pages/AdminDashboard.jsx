@@ -76,6 +76,7 @@ const AdminDashboard = () => {
     try {
       const res = await fetch(`${apiUrl}/api/personnel`);
       const data = await res.json();
+      console.log(data);
       if (data.success) {
         const filtered = data.data.filter(
           (p) => p.available && p.role.toLowerCase() === complaintType.toLowerCase()
