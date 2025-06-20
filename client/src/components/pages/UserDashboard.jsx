@@ -1,4 +1,4 @@
-const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
+const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";

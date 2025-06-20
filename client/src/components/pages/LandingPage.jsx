@@ -1,3 +1,4 @@
+const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Send, Ticket, ShieldCheck, Clock, MessagesSquare, ChevronRight } from "lucide-react";

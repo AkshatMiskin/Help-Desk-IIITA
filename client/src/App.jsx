@@ -1,5 +1,5 @@
-const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
-
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+console.log(apiUrl);
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -81,7 +81,7 @@ const App = () => {
         {/* <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> */}
           <Routes>
             <Route 
-              path="/" 
+              path="/"
               element={<LandingPage />} 
             />
             <Route 

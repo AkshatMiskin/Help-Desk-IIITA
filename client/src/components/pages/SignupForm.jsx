@@ -1,4 +1,4 @@
-const apiUrl = import.meta.env.BACKEND_URL || "http://localhost:5000";
+const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
