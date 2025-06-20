@@ -1,13 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import FloatingIcons from "../ui/FloatingIcons";
-import ChevronRight from "../../assets/Icons/ChevronRight";
-import Flash from "../../assets/Icons/Flash";
-import Plumbing from "../../assets/Icons/Plumbing";
-import Computer from "../../assets/Icons/Computer";
-import Setting from "../../assets/Icons/Setting";
-import Cleaning from "../../assets/Icons/Cleaning";
-import Wifi from "../../assets/Icons/Wifi";
+import {ChevronRight, Flash, Plumbing, Computer, Setting, Cleaning, Wifi} from "../../assets/Icons";
 
 const categories = [
   {

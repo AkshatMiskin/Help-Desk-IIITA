@@ -1,22 +1,9 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { 
-  Check, 
-  Star, 
-  Loader2, 
-  AlertCircle, 
-  File, 
-  MapPin, 
-  Clock, 
-  User, 
-  Calendar, 
-  ExternalLink } from "lucide-react";
-import Close from "../../assets/Icons/Close";
-import Search from "../../assets/Icons/Search";
-
+import useNotify from "../../hooks/useNotify";
+import { Check, Star, Loader2, AlertCircle, File, MapPin, Clock, User, Calendar, ExternalLink } from "lucide-react";
+import {Close, Search} from "../../assets/Icons";
 const UserDashboard = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,11 +11,7 @@ const UserDashboard = () => {
   const [activeFeedbackForm, setActiveFeedbackForm] = useState(null);
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-
-  const notifyError = (message) =>
-    toast.error(message, { position: "top-right", autoClose: 3000 });
-  const notifySuccess = (message) =>
-    toast.success(message, { position: "top-right", autoClose: 3000 });
+  const { notifySuccess, notifyError } = useNotify();
 
   const handleFeedbackSubmit = async (complaint) => {
     if (!feedback[complaint.id]?.rating) {

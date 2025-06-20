@@ -1,26 +1,12 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import FloatingIcons from "../ui/FloatingIcons";
+import useNotify from "../../hooks/useNotify";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const notifyError = (message) => {
-    toast.error(message, {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
-
-  const notifySuccess = (message) => {
-    toast.success(message, {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
+  const { notifyError, notifySuccess } = useNotify();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

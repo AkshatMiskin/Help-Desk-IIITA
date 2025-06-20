@@ -1,16 +1,7 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import ExclamationMark from "../../assets/Icons/ExclamationMark";
-import AddUser from "../../assets/Icons/AddUser";
-import Person from "../../assets/Icons/Person";
-import Document from "../../assets/Icons/Document";
-import Chat from "../../assets/Icons/Chat";
-import Microphone from "../../assets/Icons/Microphone";
-import Group from "../../assets/Icons/Group";
-import Success from "../../assets/Icons/Success";
-import Button from "../ui/Button";
+import {ExclamationMark, AddUser, Person, Document, Chat, Microphone, Group, Success, Button} from "../../assets/Icons";
+import useNotify from "../../hooks/useNotify";
 
 const AdminDashboard = () => {
   const [complaints, setComplaints] = useState([]);
@@ -24,10 +15,7 @@ const AdminDashboard = () => {
     name: "", contact: "", role: "",
   });
   const [filterStatus, setFilterStatus] = useState("Active");
-
-  const notify = (message, type = "success") => {
-    toast[type](message, { position: "top-right", autoClose: 3000 });
-  };
+  const { notify } = useNotify();
 
   const resolve = async (id) => {
     try {

@@ -1,21 +1,11 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode"; 
-import QuestionMark from "../../assets/Icons/QuestionMark";
-import Tag from "../../assets/Icons/Tag";
-import AdjustmentVertical from "../../assets/Icons/AdjustmentVertical";
-import ChevronDown from "../../assets/Icons/ChevronDown";
-import Location from "../../assets/Icons/Location"
-import Message from "../../assets/Icons/Message";
-import Support from "../../assets/Icons/Support";
-import Upload from "../../assets/Icons/Upload";
-import Close from "../../assets/Icons/Close"
-import Tick from "../../assets/Icons/Tick";
-import Spinner from "../../assets/Icons/Spinner";
-import Minus from "../../assets/Icons/Minus"
+import {QuestionMark, Tag, AdjustmentVertical, ChevronDown, Location, Message, 
+        Support, Upload, Close, Tick, Spinner, Minus} from "../../assets/Icons";
+import useNotify from "../../hooks/useNotify";
+
 const TicketForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileName, setFileName] = useState("");
@@ -30,14 +20,7 @@ const TicketForm = () => {
   });
   const location = useLocation();
   const categoryFromState = location.state?.category || "";
-  
-  const notifyError = (message) => {
-    toast.error(message, { position: "top-right", autoClose: 3000 });
-  };
-  
-  const notifySuccess = (message) => {
-    toast.success(message, { position: "top-right", autoClose: 3000 });
-  };
+  const { notifySuccess, notifyError } = useNotify();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -142,7 +125,6 @@ const TicketForm = () => {
     }
   };
 
-  // Ticket icons for priority levels
   const priorityIcons = {
     Low: (
       <Minus color={'blue'} />
@@ -155,7 +137,6 @@ const TicketForm = () => {
     ),
   };
 
-  // Group locations by category
   const locationGroups = {
     "Academic": [
       "Admin Building", "LT", "CC-1", "CC-2", "CC-3", "Library", "RSA", "Main Auditorium"
@@ -177,9 +158,6 @@ const TicketForm = () => {
       "Pumping Station", "Electric Sub-Station"
     ]
   };
-
-  // Flatten the location groups for selection
-  const allLocations = Object.values(locationGroups).flat();
 
   return (
     <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen"> 

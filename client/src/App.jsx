@@ -1,25 +1,10 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer } from "react-toastify";
-import LandingPage from "./components/pages/LandingPage";
-import LoginForm from "./components/pages/LoginForm";
-import SignupForm from "./components/pages/SignupForm";
-import ComplaintForm from "./components/pages/ComplaintForm";
-import AdminDashboard from "./components/pages/AdminDashboard";
-import Header from "./components/pages/Header";
-import Footer from "./components/pages/Footer";
-import Track from "./components/pages/Track";
-import UserDashboard from "./components/pages/UserDashboard";
-import CategorySelection from "./components/pages/CategorySelection";
-import ForgotPassword from "./components/pages/ForgotPassword";
-import ResetPassword from "./components/pages/ResetPassword";
+import { LandingPage, LoginForm, SignupForm, ComplaintForm, AdminDashboard, Header, Footer, 
+  Track, UserDashboard, CategorySelection, ForgotPassword, ResetPassword } from "./components/pages/export";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -77,7 +62,6 @@ const App = () => {
     <Router>
       <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
         <Header isLoggedIn={isLoggedIn} isAdmin={isAdmin} onLogout={handleLogout} />
-        {/* <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> */}
           <Routes>
             <Route 
               path="/"
@@ -122,7 +106,6 @@ const App = () => {
             />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
-        {/* </main> */}
         <Footer />
       </div>
     </Router>
