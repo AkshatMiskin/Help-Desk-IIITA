@@ -6,12 +6,15 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const complaintRoutes = require("./routes/complaintRoutes");
 const personnelRoutes = require("./routes/personnelRoutes");
+// const http = require("http");
+// const server = http.createServer(app);
+// // const {connectSocket} = require("./socket");
+// connectSocket(server);
 
 dotenv.config();
 
 app.use(cors({
   origin: "https://help-desk-iiita.vercel.app",
-  // origin: "http://localhost:5173",
 }));
 
 app.use(express.json());

@@ -27,6 +27,13 @@ npm install
 npm run dev
 ```
 
+### Docker setup
+some error is there, will fix it !
+```
+docker compose up --build
+docker compose up
+```
+
 ## CLASS DIAGRAM
 ![Screenshot 2025-04-27 163356](https://github.com/user-attachments/assets/e10f681e-217a-4ec1-8155-5038b91f88fb)
 

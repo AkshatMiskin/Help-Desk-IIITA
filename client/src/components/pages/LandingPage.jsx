@@ -67,6 +67,14 @@ const LandingPage = () => {
               >
                 View Existing Tickets
               </Button>
+              {isLoggedIn && (
+                <Button
+                onClick={() => navigate("/profile")}
+                icon={ChevronRight}
+                variant="primary"
+              >
+                Go to Your Dashboard
+              </Button>)}
               </div>
             </div>
             <div className="z-10 md:w-5/12">
