@@ -2,6 +2,7 @@ const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useState } from "react";
 import useNotify from "../../hooks/useNotify";
 import FloatingIcons from "../ui/FloatingIcons";
+import Particles from "../ui/Particles";
 
 const LoginForm = ({ onLogin }) => {
   const [email, setEmail] = useState("");
@@ -36,6 +37,7 @@ const LoginForm = ({ onLogin }) => {
 
   return (
     <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
+    <Particles />
       <div className="w-full max-w-2xl bg-gray-800 p-12 rounded-3xl shadow-2xl border border-gray-700">
         <FloatingIcons />
         <div className="text-center mb-10">

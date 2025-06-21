@@ -37,7 +37,7 @@ const Header = ({ isLoggedIn, onLogout }) => {
     setMenuOpen(!menuOpen);
   };
 
-  return (
+  return (<>
     <header className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-900 shadow-xl sticky top-0 z-50 backdrop-blur-sm bg-opacity-95">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
@@ -161,6 +161,8 @@ const Header = ({ isLoggedIn, onLogout }) => {
         )}
       </div>
     </header>
+  </>
+    
   );
 };
 

@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useNotify from "../../hooks/useNotify";
 import FloatingIcons from "../ui/FloatingIcons";
-
+import Particles from "../ui/Particles";
+  
 const SignupForm = () => {
   const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");
@@ -43,6 +44,7 @@ const SignupForm = () => {
     <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
       <div className="min-h-screen w-full max-w-2xl bg-gray-800 p-12 rounded-3xl shadow-2xl border border-gray-700">
         <FloatingIcons />
+        <Particles />
         <div className="text-center mb-10">
           <h1 className="text-5xl font-extrabold text-indigo-400">IIITA Help Desk</h1>
           <h2 className="text-2xl font-medium text-gray-300 mt-4">Create an Account</h2>

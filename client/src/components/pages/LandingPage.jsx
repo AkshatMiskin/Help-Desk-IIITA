@@ -7,6 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import FloatingIcons from "../ui/FloatingIcons";
 import FeatureCard from "../ui/FeatureCard";
 import Button from "../ui/Button";
+import Particles from "../ui/Particles";
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -33,14 +34,17 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-900 via-gray-900 to-black text-white">
-      <FloatingIcons />
+      {/* <FloatingIcons /> */}
       
       {/* Hero Section */}
       <div className="relative overflow-hidden">
+      <Particles />
         <div className="absolute inset-0 bg-black opacity-40 z-0"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
           <div className="pt-20 pb-16 md:pt-32 md:pb-24 flex flex-col md:flex-row items-center justify-between">
             <div className="z-10 text-left md:w-1/2 mb-10 md:mb-0">
+            
               <div className="inline-block px-4 py-1 rounded-full bg-indigo-800/60 text-indigo-200 text-sm font-medium mb-4">
                 {isLoggedIn ? "Welcome Back!" : "IIITA Help Desk"}
               </div>
