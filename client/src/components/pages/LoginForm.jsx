@@ -2,9 +2,8 @@ const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useState } from "react";
 import useNotify from "../../hooks/useNotify";
 import FloatingIcons from "../ui/FloatingIcons";
-import Particles from "../ui/Particles";
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = ({onLogin}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { notifySuccess, notifyError } = useNotify();

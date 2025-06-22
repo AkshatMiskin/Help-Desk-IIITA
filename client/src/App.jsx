@@ -69,7 +69,7 @@ const App = () => {
             />
             <Route 
               path="/login" 
-              element={isLoggedIn ? (<Navigate to={isAdmin ? "/admin" : "/dashboard"} />) : (<LoginForm onLogin={handleLogin} />)
+              element={isLoggedIn ? (<Navigate to={isAdmin ? "/admin" : "/dashboard"} />) : (<LoginForm onLogin={handleLogin}/>)
               }
             />
             <Route 

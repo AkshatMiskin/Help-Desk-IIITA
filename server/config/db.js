@@ -2,39 +2,22 @@ const mysql = require('mysql2');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const config = {
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT || 3306,
-};
+});
 
-let db;
-
-function connectWithRetry(retries = 10, delay = 5000) {
-  db = mysql.createConnection(config);
-
-  db.connect((err) => {
-    if (err) {
-      console.error(`MySQL connection failed: ${err.message}`);
-
-      if (retries === 0) {
-        console.error('❌ No retries left. Exiting.');
-        process.exit(1);
-      }
-
-      console.log(`🔁 Retrying in ${delay / 1000} seconds... (${retries} retries left)`);
-      setTimeout(() => connectWithRetry(retries - 1, delay), delay);
-      return;
-    }
-
-    console.log('✅ MySQL Connected!');
-
-    // Create tables after successful connection
-    initializeTables();
-  });
-}
+db.connect((err) => {
+  if (err) {
+    console.error('❌ MySQL connection failed:', err);
+    process.exit(1);
+  }
+  console.log('✅ MySQL Connected!');
+  initializeTables();
+});
 
 function initializeTables() {
   const createUsersTable = `
@@ -50,12 +33,20 @@ function initializeTables() {
 
   const createPersonnelTable = `
     CREATE TABLE IF NOT EXISTS personnel (
-        id INT NOT NULL AUTO_INCREMENT,
-        name VARCHAR(100) NOT NULL,
-        contact VARCHAR(15) NOT NULL,
-        role ENUM('Network', 'Cleaning', 'Carpentry', 'PC Maintenance', 'Plumbing', 'Electricity') NOT NULL,
-        available TINYINT(1) NOT NULL,
-        PRIMARY KEY (id)
+      id INT NOT NULL AUTO_INCREMENT,
+      name VARCHAR(100) NOT NULL,
+      contact VARCHAR(15) NOT NULL,
+      role ENUM('Network', 'Cleaning', 'Carpentry', 'PC Maintenance', 'Plumbing', 'Electricity') NOT NULL,
+      available TINYINT(1) NOT NULL,
+      PRIMARY KEY (id)
+    );
+  `;
+
+  const createComplaintTypesTable = `
+    CREATE TABLE IF NOT EXISTS complaint_types (
+      id INT NOT NULL AUTO_INCREMENT,
+      type_name VARCHAR(50) NOT NULL UNIQUE,
+      PRIMARY KEY (id)
     );
   `;
 
@@ -80,14 +71,6 @@ function initializeTables() {
       CONSTRAINT fk_complaint_type FOREIGN KEY (complaint_type_id) REFERENCES complaint_types (id),
       CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id),
       CONSTRAINT fk_assigned_personnel FOREIGN KEY (assigned_personnel_id) REFERENCES personnel (id)
-    );
-  `;
-
-  const createComplaintTypesTable = `
-    CREATE TABLE IF NOT EXISTS complaint_types (
-      id INT NOT NULL AUTO_INCREMENT,
-      type_name VARCHAR(50) NOT NULL UNIQUE,
-      PRIMARY KEY (id)
     );
   `;
 
@@ -117,14 +100,12 @@ function initializeTables() {
   queries.forEach((query, index) => {
     db.query(query, (err) => {
       if (err) {
-        console.error(`❌ Failed to execute query ${index}: ${err.message}`);
+        console.error(`❌ Failed to execute query ${index + 1}: ${err.message}`);
       } else {
         console.log(`✅ Table ${index + 1} ensured to exist.`);
       }
     });
   });
 }
-
-connectWithRetry();
 
 module.exports = db;
