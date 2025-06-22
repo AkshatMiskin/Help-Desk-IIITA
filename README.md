@@ -30,8 +30,7 @@ npm run dev
 ### Docker setup
 some error is there, will fix it !
 ```
-docker compose up --build
-docker compose up
+docker-compose up --build
 ```
 
 ## CLASS DIAGRAM
