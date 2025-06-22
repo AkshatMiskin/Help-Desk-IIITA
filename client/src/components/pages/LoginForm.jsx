@@ -37,8 +37,8 @@ const LoginForm = ({ onLogin }) => {
 
   return (
     <main className="flex-grow mx-auto px-4 sm:px-6 lg:px-8 py-8"> 
-    <Particles />
       <div className="w-full max-w-2xl bg-gray-800 p-12 rounded-3xl shadow-2xl border border-gray-700">
+        <FloatingIcons />
         <FloatingIcons />
         <div className="text-center mb-10">
           <h1 className="text-5xl font-extrabold text-indigo-400">IIITA Help Desk</h1>
