@@ -1,10 +1,11 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-// import { useChat } from "../../hooks/useChat";
+import StarRating from "../../components/StarRating";
 import useNotify from "../../hooks/useNotify";
 import { Check, Star, Loader2, AlertCircle, File, MapPin, Clock, User, Calendar, ExternalLink } from "lucide-react";
 import {Close, Search} from "../../assets/Icons";
+import ChatUser from "../ChatUser";
 
 const UserDashboard = () => {
   const [complaints, setComplaints] = useState([]);
@@ -14,13 +15,7 @@ const UserDashboard = () => {
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const { notifySuccess, notifyError } = useNotify();
-  // const token = localStorage.getItem("token");
-  // const decoded = token ? jwtDecode(token) : null;
-  // const { messages, sendMessage } = useChat({ 
-  //   userId: decoded?.email, 
-  //   isAdmin: false 
-  // });
-  // const [chatInput, setChatInput] = useState("");
+  
 
   const handleFeedbackSubmit = async (complaint) => {
     if (!feedback[complaint.id]?.rating) {
@@ -108,25 +103,6 @@ const UserDashboard = () => {
   const totalResolved = complaints.filter(c => c.status === "Resolved").length;
   const totalPending = complaints.filter(c => c.status !== "Resolved").length;
   const totalComplaints = complaints.length;
-
-  // Render star rating component
-  const StarRating = ({ rating, showCount = true, size = "small" }) => {
-    const sizeClass = size === "large" ? "w-8 h-8" : "w-5 h-5";
-    
-    return (
-      <div className="flex items-center">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            className={`${sizeClass} ${
-              i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'
-            }`}
-          />
-        ))}
-        {showCount && <span className="ml-2 text-yellow-500 font-medium">{rating}/5</span>}
-      </div>
-    );
-  };
 
   const getPriorityColor = (priority) => {
     switch(priority?.toLowerCase()) {
@@ -452,37 +428,7 @@ const UserDashboard = () => {
         </div>
       )}
 
-      {/* Chat Section */}
-      {/* <div className="fixed bottom-6 right-6 w-80 bg-gray-900 rounded-xl shadow-lg border border-gray-700 p-4">
-        <h3 className="text-lg font-bold text-white mb-2">Chat with Admin</h3>
-        <div className="h-48 overflow-y-auto bg-gray-800 rounded-lg p-2 mb-2">
-          {messages.map((msg, idx) => (
-            <div key={idx} className={`mb-1 text-sm ${msg.from === "user" ? "text-right" : "text-left"}`}>
-              <span className={`inline-block px-2 py-1 rounded ${msg.from === "user" ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"}`}>
-                {msg.message}
-              </span>
-            </div>
-          ))}
-        </div>
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-            if (chatInput.trim()) {
-              sendMessage({ userId: decoded.email, message: chatInput });
-              setChatInput("");
-            }
-          }}
-          className="flex gap-2"
-        >
-          <input
-            className="flex-1 px-3 py-2 rounded bg-gray-700 text-white"
-            value={chatInput}
-            onChange={e => setChatInput(e.target.value)}
-            placeholder="Type a message..."
-          />
-          <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded">Send</button>
-        </form>
-      </div> */}
+      <ChatUser />
     </div>
   );
 };

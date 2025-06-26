@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 
 // For admin: userId is the selected user to chat with
 export const useChat = ({ userId, isAdmin }) => {
-  const [messages, setMessages] = useState([]);
+  const [userMessages, setuserMessages] = useState([]);
   const [userList, setUserList] = useState([]); // List of users who have chatted
   const socketRef = useRef();
 
@@ -15,7 +15,7 @@ export const useChat = ({ userId, isAdmin }) => {
     socketRef.current.on("receiveMessage", (msg) => {
       if (isAdmin) {
         // msg: { userId, message, from }
-        setMessages((prev) => {
+        setuserMessages((prev) => {
           // Only show messages for the selected user
           if (msg.userId === userId) {
             return [...prev, msg];
@@ -30,7 +30,7 @@ export const useChat = ({ userId, isAdmin }) => {
         });
       } else {
         // For user: just append messages
-        setMessages((prev) => [...prev, msg]);
+        setuserMessages((prev) => [...prev, msg]);
       }
     });
 
@@ -47,10 +47,10 @@ export const useChat = ({ userId, isAdmin }) => {
   // When admin switches user, clear messages and request chat history
   useEffect(() => {
     if (isAdmin && userId) {
-      setMessages([]); // Clear messages when switching user
+      setuserMessages([]); // Clear messages when switching user
       socketRef.current.emit("getChatHistory", { userId });
       socketRef.current.on("chatHistory", (history) => {
-        setMessages(history || []);
+        setuserMessages(history || []);
       });
     }
     // eslint-disable-next-line
@@ -60,12 +60,12 @@ export const useChat = ({ userId, isAdmin }) => {
     if (isAdmin) {
       // Admin sends to a specific user
       socketRef.current.emit("adminReply", { userId, message: msg.message });
-      setMessages((prev) => [...prev, { ...msg, from: "admin" }]);
+      setuserMessages((prev) => [...prev, { ...msg, from: "admin" }]);
     } else {
       socketRef.current.emit("userMessage", { userId, message: msg.message });
-      setMessages((prev) => [...prev, { ...msg, from: "user" }]);
+      setuserMessages((prev) => [...prev, { ...msg, from: "user" }]);
     }
   };
 
-  return { messages, sendMessage, userList };
+  return { userMessages, sendMessage, setuserMessages, userList };
 };

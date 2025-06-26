@@ -1,9 +1,9 @@
 const apiUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {ExclamationMark, AddUser, Person, Document, Chat, Microphone, Group, Success} from "../../assets/Icons";
 import useNotify from "../../hooks/useNotify";
-// import { useChat } from "../../hooks/useChat";
 import Button from "../ui/Button";
+import FloatingChatButton from "../FloatingChatButton";
 
 const AdminDashboard = () => {
   const [complaints, setComplaints] = useState([]);
@@ -16,14 +16,7 @@ const AdminDashboard = () => {
   const [newPersonnel, setNewPersonnel] = useState({
     name: "", contact: "", role: "",
   });
-  // const [selectedUser, setSelectedUser] = useState(null);
-  // const [chatInput, setChatInput] = useState("");
 
-  // // Use the chat hook for admin
-  // const { messages, sendMessage, userList } = useChat({
-  //   userId: selectedUser,
-  //   isAdmin: true,
-  // });
   const [filterStatus, setFilterStatus] = useState("Active");
   const { notify } = useNotify();
 
@@ -454,66 +447,8 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Chat Modal */}
-      {/* <div className="fixed bottom-6 right-6 w-96 bg-gray-900 rounded-xl shadow-lg border border-gray-700 p-4 z-50">
-        <h3 className="text-lg font-bold text-white mb-2">User Chats</h3>
-        <div className="flex">
-
-          <div className="w-1/3 border-r border-gray-700 pr-2 overflow-y-auto max-h-64">
-            {userList && userList.length > 0 ? (
-              userList.map((user) => (
-                <div
-                  key={user}
-                  className={`p-2 cursor-pointer rounded ${selectedUser === user ? "bg-indigo-700 text-white" : "text-gray-300 hover:bg-gray-800"}`}
-                  onClick={() => setSelectedUser(user)}
-                >
-                  {user}
-                </div>
-              ))
-            ) : (
-              <div className="text-gray-500 text-sm">No active users</div>
-            )}
-          </div>
-
-          <div className="w-2/3 pl-3 flex flex-col">
-            <div className="h-48 overflow-y-auto bg-gray-800 rounded-lg p-2 mb-2 flex-1">
-              {messages && messages.length > 0 ? (
-                messages.map((msg, idx) => (
-                  <div key={idx} className={`mb-1 text-sm ${msg.from === "admin" ? "text-right" : "text-left"}`}>
-                    <span className={`inline-block px-2 py-1 rounded ${msg.from === "admin" ? "bg-indigo-600 text-white" : "bg-gray-700 text-gray-200"}`}>
-                      {msg.message}
-                    </span>
-                  </div>
-                ))
-              ) : (
-                <div className="text-gray-500 text-sm">No messages</div>
-              )}
-            </div>
-            
-            <form
-              onSubmit={e => {
-                e.preventDefault();
-                if (chatInput.trim() && selectedUser) {
-                  sendMessage({ userId: selectedUser, message: chatInput });
-                  setChatInput("");
-                }
-              }}
-              className="flex gap-2"
-            >
-              <input
-                className="flex-1 px-3 py-2 rounded bg-gray-700 text-white"
-                value={chatInput}
-                onChange={e => setChatInput(e.target.value)}
-                placeholder={selectedUser ? "Type a message..." : "Select a user to chat"}
-                disabled={!selectedUser}
-              />
-              <button type="submit" className="bg-indigo-600 text-white px-4 py-2 rounded" disabled={!selectedUser}>
-                Send
-              </button>
-            </form>
-          </div>
-        </div>
-      </div> */}
+      {/* Chat button */}
+      <FloatingChatButton />
     </main>
   );
 };

@@ -6,10 +6,11 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/userRoutes');
 const complaintRoutes = require("./routes/complaintRoutes");
 const personnelRoutes = require("./routes/personnelRoutes");
-// const http = require("http");
-// const server = http.createServer(app);
-// // const {connectSocket} = require("./socket");
-// connectSocket(server);
+const chatRoutes = require("./routes/chatRoutes");
+const http = require("http");
+const server = http.createServer(app);
+const {connectSocket} = require("./socket");
+connectSocket(server);
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use('/api', userRoutes);
 app.use("/api", complaintRoutes);
 app.use("/api/personnel", personnelRoutes);
+app.use("/api/chat", chatRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

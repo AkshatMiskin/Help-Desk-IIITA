@@ -89,12 +89,24 @@ function initializeTables() {
     );
   `;
 
+  const createChatTable = `
+    CREATE TABLE IF NOT EXISTS chat (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      message TEXT NOT NULL,
+      from_role ENUM('user', 'admin') NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+  `;
+
   const queries = [
     createComplaintTypesTable,
     createUsersTable,
     createPersonnelTable,
     createComplaintsTable,
     createFeedbackTable,
+    createChatTable
   ];
 
   queries.forEach((query, index) => {

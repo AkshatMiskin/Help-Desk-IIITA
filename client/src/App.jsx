@@ -5,6 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import { ToastContainer } from "react-toastify";
 import { LandingPage, LoginForm, SignupForm, ComplaintForm, AdminDashboard, Header, Footer, 
   Track, UserDashboard, CategorySelection, ForgotPassword, ResetPassword } from "./components/pages/export";
+import ChatUser from "./components/ChatUser";
+import ChatAdmin from "./components/ChatAdmin";
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -103,6 +105,11 @@ const App = () => {
             <Route 
               path="/reset-password/:token" 
               element={<ResetPassword />} 
+            />
+
+            <Route 
+              path="/chatadmin"
+              element={isLoggedIn && isAdmin && <ChatAdmin />}
             />
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>

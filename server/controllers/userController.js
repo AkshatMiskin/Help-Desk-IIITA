@@ -48,7 +48,8 @@ const login = (req, res) => {
       const token = jwt.sign({ 
         name: user.name, 
         email: user.email, 
-        isAdmin: user.role === 'admin' 
+        isAdmin: user.role === 'admin',
+        id: user.id
       },
         SECRET_KEY,
         { expiresIn: '1h' }
